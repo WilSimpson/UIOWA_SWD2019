@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/extra_credit/10-13_Shapes_Easy/10-13_Shapes_Easy.iml" filepath="$PROJECT_DIR$/extra_credit/10-13_Shapes_Easy/10-13_Shapes_Easy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/extra_credit/22-7_RandomCircle_Easy/22-7_RandomCircle_Easy.iml" filepath="$PROJECT_DIR$/extra_credit/22-7_RandomCircle_Easy/22-7_RandomCircle_Easy.iml" />
       <module fileurl="file://$PROJECT_DIR$/textbook_examples/MVCCalculatorExamples/EXAMPLE_MVCCalculator1/EXAMPLE_MVCCalculator1.iml" filepath="$PROJECT_DIR$/textbook_examples/MVCCalculatorExamples/EXAMPLE_MVCCalculator1/EXAMPLE_MVCCalculator1.iml" />
       <module fileurl="file://$PROJECT_DIR$/textbook_examples/MVCCalculatorExamples/EXAMPLE_MVCCalculator2/EXAMPLE_MVCCalculator2.iml" filepath="$PROJECT_DIR$/textbook_examples/MVCCalculatorExamples/EXAMPLE_MVCCalculator2/EXAMPLE_MVCCalculator2.iml" />
       <module fileurl="file://$PROJECT_DIR$/textbook_examples/MVCCalculatorExamples/EXAMPLE_MVCCalculator3/EXAMPLE_MVCCalculator3.iml" filepath="$PROJECT_DIR$/textbook_examples/MVCCalculatorExamples/EXAMPLE_MVCCalculator3/EXAMPLE_MVCCalculator3.iml" />
