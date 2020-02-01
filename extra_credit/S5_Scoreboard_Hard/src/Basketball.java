@@ -7,14 +7,10 @@ public class Basketball extends Game {
      * @param awayTeam        away team playing the game
      */
     public Basketball(Team homeTeam, Team awayTeam) {
-        super(homeTeam,
-                awayTeam,
-                2,
-                20,
-                "Half");
+        super(homeTeam, awayTeam, new Period("Half", 2, 20));
 
-        addScoringMethods(ScoringMethod.TWO_POINT_BASKET,
-                ScoringMethod.THREE_POINT_BASKET,
-                ScoringMethod.FREE_THROW);
+        addScoringMethods(new ScoringMethod("Two Point Basket", 2),
+                new ScoringMethod("Three Point Basket", 3),
+                new ScoringMethod("Free Throw", 1));
     }
 }

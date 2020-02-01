@@ -10,8 +10,7 @@ import java.util.List;
  * @author Wil Simpson
  * @TODO redo javadocs for this class description
  */
-public abstract class Game
-{
+public abstract class Game {
     /**
      * Index referred to for the home team
      */
@@ -21,11 +20,6 @@ public abstract class Game
      * Index referred to for the away team
      */
     private static final int AWAY_TEAM = 1;
-
-    /**
-     * The name of for each period for the game
-     */
-    private final String periodName;
 
     /**
      * The two teams playing the game. The HOME_TEAM and the AWAY_TEAM refers to which index is for each.
@@ -39,19 +33,9 @@ public abstract class Game
     private int[] scores = {0, 0};
 
     /**
-     * The total number of periods in a game
+     * The period for the game
      */
-    private final int numberOfPeriods;
-
-    /**
-     * The time length in minutes for each period
-     */
-    private final int lengthOfPeriod;
-
-    /**
-     * The current period the game is in. A current period greater than the number of periods means the game is over.
-     */
-    private int currentPeriod;
+    private Period period;
 
     /**
      * All valid scoring methods for the game. Order is kept consistent.
@@ -62,20 +46,15 @@ public abstract class Game
     /**
      * Creates a game given the parameters and sets the score for both teams to 0
      *
-     * @param homeTeam          home team playing the game
-     * @param awayTeam          away team playing the game
-     * @param numberOfPeriods   total number of periods in the game
-     * @param lengthOfPeriod    time length in minutes for each period
-     * @param periodName  name for each period (ie- half, quarter, period, ect)
+     * @param homeTeam  home team playing the game
+     * @param awayTeam  away team playing the game
+     * @param period    period for the game
      */
-    public Game(Team homeTeam, Team awayTeam, int numberOfPeriods, int lengthOfPeriod, String periodName)
+    public Game(Team homeTeam, Team awayTeam, Period period)
     {
         teams[HOME_TEAM] = homeTeam;
         teams[AWAY_TEAM] = awayTeam;
-        this.numberOfPeriods = numberOfPeriods;
-        this.lengthOfPeriod = lengthOfPeriod;
-        currentPeriod = 0;
-        this.periodName = periodName;
+        this.period = period;
     }
 
     /**
@@ -194,7 +173,7 @@ public abstract class Game
      */
     public boolean hasGameStarted()
     {
-        return currentPeriod > 0;
+        return period.hasGameStarted();
     }
 
     /**
@@ -207,9 +186,9 @@ public abstract class Game
      */
     public boolean startGame()
     {
-        if(hasGameStarted()) return false;
+        if(hasGameStarted() || getHomeTeam() == null || getAwayTeam() == null) return false;
 
-        currentPeriod = 1;
+        period.startGame();
         return true;
     }
 
@@ -224,7 +203,7 @@ public abstract class Game
         if(!hasGameStarted()) return false;
         if(isGameOver()) return false;
 
-        currentPeriod++;
+        period.nextPeriod();
         return true;
     }
 
@@ -235,7 +214,7 @@ public abstract class Game
      */
     public int getNumberOfPeriods()
     {
-        return numberOfPeriods;
+        return period.getNumberOfPeriods();
     }
 
     /**
@@ -245,7 +224,7 @@ public abstract class Game
      */
     public int getLengthOfPeriod()
     {
-        return lengthOfPeriod;
+        return period.getLengthOfPeriod();
     }
 
     /**
@@ -256,7 +235,7 @@ public abstract class Game
      */
     public int getCurrentPeriod()
     {
-        return currentPeriod;
+        return period.getCurrentPeriod();
     }
 
     /**
@@ -267,7 +246,7 @@ public abstract class Game
      */
     public boolean isGameOver()
     {
-        return currentPeriod > numberOfPeriods;
+        return period.isGameOver();
     }
 
     /**
@@ -408,9 +387,14 @@ public abstract class Game
         if(!hasGameStarted()) return "The game has not started yet!";
         if(isGameOver()) return "GAME OVER !!!";
 
-        int period = getCurrentPeriod();
+        int periodNumber = getCurrentPeriod();
 
-        return "Current "+ periodName +": "
-                + (period != getNumberOfPeriods() ? period : "Final");
+        return "Current "+ period.getName() +": "
+                + (periodNumber != getNumberOfPeriods()+1 ? periodNumber : "Final");
+    }
+
+    public String getPeriodName()
+    {
+        return period.getName();
     }
 }

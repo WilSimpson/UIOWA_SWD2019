@@ -9,8 +9,8 @@ public class Hockey extends Game
      * @param awayTeam         away team playing the game
      */
     public Hockey(Team homeTeam, Team awayTeam) {
-        super(homeTeam, awayTeam, 3, 20, "Period");
+        super(homeTeam, awayTeam, new Period("Period", 3, 15));
 
-        addScoringMethods(ScoringMethod.GOAL);
+        addScoringMethods(new ScoringMethod("Goal", 1 ));
     }
 }

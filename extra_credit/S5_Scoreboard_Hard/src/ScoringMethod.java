@@ -1,33 +1,22 @@
-public enum ScoringMethod
+public class ScoringMethod
 {
-    //Football scoring methods
-    TOUCHDOWN(7),
-    FIELD_GOAL(3),
-    EXTRA_POINT(1),
-    TWO_POINT_CONVERSION(2),
-    SAFETY(2),
-
-    //Basketball scoring methods
-    TWO_POINT_BASKET(2),
-    THREE_POINT_BASKET(3),
-    FREE_THROW(1),
-
-    //Soccer and Hockey scoring methods
-    GOAL(1);
-
     /**
      * Amount of points the scoring method is worth
      */
-    private int scoringValue;
+    private final int value;
 
     /**
-     * Creates a new scoring method with the given scoring value
-     * @param scoringValue
+     * Name of the scoring method
      */
-    private ScoringMethod(int scoringValue)
+    private final String name;
+
+    public ScoringMethod(String name, int value)
     {
-        this.scoringValue = scoringValue;
+        this.name = name;
+        this.value = value;
     }
+
+
 
     /**
      * Gets the score value of the scoring method
@@ -36,6 +25,11 @@ public enum ScoringMethod
      */
     public int getScoringValue()
     {
-        return scoringValue;
+        return value;
+    }
+
+    public String getName()
+    {
+        return name;
     }
 }

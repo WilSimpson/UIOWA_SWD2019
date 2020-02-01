@@ -11,17 +11,13 @@ public class Football extends Game
      * @param awayTeam away team playing the game
      */
     public Football(Team homeTeam, Team awayTeam) {
-        super(homeTeam,
-                awayTeam,
-                4,
-                15,
-                "Quarter");
+        super(homeTeam, awayTeam, new Period("Quarter", 4, 15));
 
-        addScoringMethods(ScoringMethod.TOUCHDOWN,
-                ScoringMethod.EXTRA_POINT,
-                ScoringMethod.FIELD_GOAL,
-                ScoringMethod.SAFETY,
-                ScoringMethod.TWO_POINT_CONVERSION);
+        addScoringMethods(new ScoringMethod("Touchdown", 6),
+                new ScoringMethod("Extra Point", 1),
+                new ScoringMethod("Field Goal", 3),
+                new ScoringMethod("Safety", 2),
+                new ScoringMethod("Two Point Conversion", 2));
     }
 
 }

@@ -4,14 +4,10 @@
  * purposes of the program.
  *
  * @author Wil Simpson
+ * @todo Update javadocs to reflect change from medium -> hard
  */
 public class ScoreboardSystem
 {
-    /**
-     * DEBUGGING ONLY
-     */
-    private static Game[] games = new Game[4];
-
     /**
      * The starting point of the program.
      *
@@ -19,120 +15,15 @@ public class ScoreboardSystem
      */
     public static void main(String[] args)
     {
-        Team hawks = new Team("Hawkeyes");
-        Team cyclones = new Team("Cyclones");
+        final Game[] allGames = {
+                new Football(null, null),
+                new Basketball(null, null),
+                new Soccer(null, null),
+                new Hockey(null, null)
+        };
 
+        GameSimulator simulator = new GameSimulator(allGames);
 
-
-        Game basketballGame = new Basketball(hawks, cyclones);
-        games[0] = basketballGame;
-
-        Game footballGame = new Football(hawks, cyclones);
-        games[1] = footballGame;
-
-        Game hockeyGame = new Hockey(hawks, cyclones);
-        games[2] = hockeyGame;
-
-        Game soccerGame = new Soccer(hawks, cyclones);
-        games[3] = soccerGame;
-
-
-        printGamesInfo();
-
-        startGames();
-        printGamesInfo();
-
-        scoreGames();
-        printGamesInfo();
-
-        endPeriodGames();
-        printGamesInfo();
-
-        endPeriodGames();
-        printGamesInfo();
-
-        endPeriodGames();
-        printGamesInfo();
-
-        endPeriodGames();
-        printGamesInfo();
-
-        endPeriodGames();
-        printGamesInfo();
-
-    }
-
-    /**
-     * DEBUGGING ONLY
-     */
-    private static void endPeriodGames()
-    {
-        for(Game g : games)
-        {
-            g.endCurrentPeriod();
-        }
-    }
-
-    /**
-     * DEBUGGING ONLY
-     */
-    private static void template()
-    {
-        for(Game g : games)
-        {
-
-        }
-    }
-
-    /**
-     * DEBUGGING ONLY
-     */
-    private static void scoreGames()
-    {
-        for(Game g : games)
-        {
-            g.addScore(g.getScoringMethods().get(0), g.getHomeTeam());
-        }
-    }
-
-    /**
-     * DEBUGGING ONLY
-     */
-    private static void startGames()
-    {
-        for(Game g : games)
-        {
-            g.startGame();
-        }
-    }
-
-    /**
-     * DEBUGGING ONLY
-     */
-    private static void printGamesInfo()
-    {
-        for(Game g : games)
-        {
-            p(g.getName()+"----|| "+g.gameToString()+" ||----");
-            p(g.scoreToString());
-            p(g.periodToString());
-            if(g.isGameOver()) p("Winning team: "+g.getWinningTeam().getName());
-            p("||--------------------------------------------------------------------||");
-            p("");
-        }
-
-        p("#################################");
-        p("#################################");
-        p("#################################");
-        p("#################################");
-        p("");
-    }
-
-    /**
-     * DEBUGGING ONLY
-     */
-    private static void p(Object o)
-    {
-        System.out.println(o);
+        simulator.startSimulation();
     }
 }

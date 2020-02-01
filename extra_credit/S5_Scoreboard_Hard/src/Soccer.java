@@ -7,8 +7,8 @@ public class Soccer extends Game {
      * @param awayTeam         away team playing the game
      */
     public Soccer(Team homeTeam, Team awayTeam) {
-        super(homeTeam, awayTeam, 2, 45, "Half");
+        super(homeTeam, awayTeam, new Period("Half", 2, 45));
 
-        addScoringMethods(ScoringMethod.GOAL);
+        addScoringMethods(new ScoringMethod("Goal", 1));
     }
 }
