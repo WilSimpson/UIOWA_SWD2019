@@ -30,6 +30,21 @@ public class OneTimePad
     }
 
     /**
+     * Shifts the given char by the given shift size. Only encrypts letter if it's apart of the alphabet.
+     *
+     * @param c Current char to shift
+     * @param shiftSize amount to shift char by
+     * @return new shifted char value
+     */
+    public static char encryptLetter(char c, int shiftSize)
+    {
+        if(!shouldEncryptChar(c)) return c;
+
+        int newIndex = (letterToIndex(c)+shiftSize) % alphabet.length;
+        return indexToLetter(newIndex);
+    }
+
+    /**
      * Encrypts the given message by shifting each letter by the given shift size. If the number is larger than the
      * alphabet size the shiftSize will wrap back to 0. This encryption keeps the original spacings. All letters will
      * be converted to their uppercase equivalent if they are not already in uppercase.
@@ -45,18 +60,7 @@ public class OneTimePad
 
         for(int i=0; i<originalMessage.length; i++)
         {
-            char currentChar = originalMessage[i];
-            if(shouldEncryptChar(currentChar))
-            {
-
-                int newIndex = (letterToIndex(currentChar)+shiftSize) % alphabet.length;
-                encryptedMessage += indexToLetter(newIndex);
-            }
-            else
-            {
-                encryptedMessage += currentChar;
-            }
-
+            encryptLetter(originalMessage[i], shiftSize);
         }
 
         return encryptedMessage;
