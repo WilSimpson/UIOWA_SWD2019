@@ -1,4 +1,4 @@
-public abstract class ThreeDimensionalShape extends TwoDimensionalShape {
-    abstract double getVolume();
+public abstract class ThreeDimensionalShape extends Shape {
+    public abstract double getVolume();
 }
 
