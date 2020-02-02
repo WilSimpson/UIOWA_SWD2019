@@ -1,10 +1,10 @@
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+
 import java.util.Map;
+import java.util.TreeMap;
 
 public class Drawer
 {
-    private Map<Currency, Integer> drawer = new HashMap<>();
+    private TreeMap<Currency, Integer> drawer = new TreeMap<>();
 
     /**
      * Initialize the draw to have unlimited -1 of each currency meaning there is unlimited of the bill.
@@ -15,14 +15,6 @@ public class Drawer
         {
             drawer.put(currency, -1);
         }
-
-        Map<Currency, Integer> change = generateEmptyCurrencyMap();
-
-        printMap(change);
-
-        change.entrySet().stream().sorted(Map.Entry.comparingByKey()).forEach((key) -> key.getValue());
-
-        printMap(change);
     }
 
     /**
@@ -30,29 +22,46 @@ public class Drawer
      *
      * @param drawer drawer to use
      */
-    public Drawer(Map<Currency, Integer> drawer)
+    public Drawer(TreeMap<Currency, Integer> drawer)
     {
         this.drawer = drawer;
     }
 
-    public Map<Currency, Integer> calculateChange(float itemCost, float moneyGiven)
+    public TreeMap<Currency, Integer> calculateChange(float itemCost, float moneyGiven)
     {
         if(moneyGiven < itemCost) return null;
 
-        Map<Currency, Integer> change = new LinkedHashMap<>();
+        float change = moneyGiven - itemCost;
+        TreeMap<Currency, Integer> changeMap = generateEmptyCurrencyMap();
 
-        printMap(change);
+        Currency biggestCurrency = getBiggestCurrency(change, changeMap);
+        while(biggestCurrency != null)
+        {
+            changeMap.put(biggestCurrency, changeMap.get(biggestCurrency)+1);
+            change -= biggestCurrency.getValue();
 
-        change.entrySet().stream().sorted(Map.Entry.comparingByKey()).forEach((key) -> key.getValue());
+            biggestCurrency = getBiggestCurrency(change, changeMap);
+        }
 
-        printMap(change);
-
-        return change;
+        return changeMap;
     }
 
-    public static Map<Currency, Integer> generateEmptyCurrencyMap()
+    public Currency getBiggestCurrency(float change, TreeMap<Currency, Integer> changeMap)
     {
-        Map<Currency, Integer> drawer = new HashMap<>();
+        for(Currency c : changeMap.keySet())
+        {
+            if(c.getValue() <= change)
+            {
+                return c;
+            }
+        }
+
+        return null;
+    }
+
+    public static TreeMap<Currency, Integer> generateEmptyCurrencyMap()
+    {
+        TreeMap<Currency, Integer> drawer = new TreeMap<>(Currency.getComparator());
         for(Currency currency : Currency.values())
         {
             drawer.put(currency, 0);
@@ -61,12 +70,22 @@ public class Drawer
         return drawer;
     }
 
-    public void printMap(Map<Currency, Integer> map)
+    public static void printMap(TreeMap<Currency, Integer> map)
     {
-        for(int i=0; i<map.keySet().size(); i++)
+        for(Currency c : map.keySet())
         {
-            System.out.print(map.keySet().toArray()[i].toString()+", ");
+            System.out.println(c+": \t"+map.get(c));
         }
-        System.out.println();
+    }
+
+    public static float valueOfCurrencyGiven(TreeMap<Currency, Integer> currencyGiven)
+    {
+        float value = 0;
+        for(Currency c : currencyGiven.keySet())
+        {
+            value += c.getValue()*currencyGiven.get(c);
+        }
+
+        return value;
     }
 }

@@ -1,3 +1,5 @@
+import java.util.Comparator;
+
 public enum Currency
 {
     TWENTY_BILL("$20", 20f),
@@ -12,10 +14,22 @@ public enum Currency
     private final String name;
     private final float value;
 
+    private static Comparator comparator = new Comparator<Currency>() {
+        @Override
+        public int compare(Currency c1, Currency c2) {
+            return Float.compare(c2.getValue(), c1.getValue());
+        }
+    };
+
     private Currency(String name, float value)
     {
         this.name = name;
         this.value = value;
+    }
+
+    public static Comparator getComparator()
+    {
+        return comparator;
     }
 
     public float getValue()
@@ -28,4 +42,6 @@ public enum Currency
     {
         return name;
     }
+
+
 }
