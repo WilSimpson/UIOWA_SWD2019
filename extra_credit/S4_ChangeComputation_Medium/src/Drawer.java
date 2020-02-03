@@ -1,10 +1,10 @@
-
-import java.util.Map;
-import java.util.Random;
+import java.text.DecimalFormat;
 import java.util.TreeMap;
 
 public class Drawer
 {
+    private static final DecimalFormat FORMATTER = new DecimalFormat("0.00");
+
     private TreeMap<Currency, Integer> drawer = new TreeMap<>();
 
     private float itemPrice;
@@ -18,8 +18,6 @@ public class Drawer
         {
             drawer.put(currency, (int) (Math.random()*(15+1)));
         }
-
-        printMap(drawer);
     }
 
     public void printDrawerContents()
@@ -32,39 +30,44 @@ public class Drawer
         this.itemPrice = itemPrice;
     }
 
-    public boolean processTransaction(TreeMap<Currency, Integer> moneyGiven)
+    public TreeMap<Currency, Integer> processTransaction(TreeMap<Currency, Integer> moneyGiven) throws TransactionException
     {
-        float moneyValue = valueOfCurrencyGiven(moneyGiven);
-        if(moneyValue < itemPrice)
-        {
-            System.out.println("Not enough money given to pay for the item!");
-            return false;
-        }
-
-        TreeMap<Currency, Integer> newDrawer = combineDrawers(moneyGiven, drawer);
-
-
-
-        return true;
-    }
-
-    public TreeMap<Currency, Integer> calculateChange(float itemCost, float moneyGiven)
-    {
-        if(moneyGiven < itemCost) return null;
-
-        float change = moneyGiven - itemCost;
+        float moneyValue = valueOfCurrencyMap(moneyGiven);
         TreeMap<Currency, Integer> changeMap = generateEmptyCurrencyMap();
 
-        Currency biggestCurrency = getBiggestCurrency(change, changeMap);
-        while(biggestCurrency != null)
+        if(moneyValue < itemPrice)
         {
-            changeMap.put(biggestCurrency, changeMap.get(biggestCurrency)+1);
-            change -= biggestCurrency.getValue();
-
-            biggestCurrency = getBiggestCurrency(change, changeMap);
+            throw new TransactionException(TransactionResult.INSUFFICIENT_FUNDS);
         }
 
+        float change = moneyValue - itemPrice;
+        TreeMap<Currency, Integer> newDrawer = combineDrawers(moneyGiven, drawer);
+
+        Currency currentCurrency = getBiggestCurrency(change, newDrawer);
+        while(currentCurrency != null)
+        {
+            changeCurrency(changeMap, currentCurrency, 1);
+            changeCurrency(newDrawer, currentCurrency, -1);
+            change -= currentCurrency.getValue();
+
+            currentCurrency = getBiggestCurrency(change, newDrawer);
+        }
+
+        change = formatFloat(change);
+
+        if(change > 0)
+        {
+            throw new TransactionException(TransactionResult.INSUFFICIENT_CHANGE);
+        }
+
+        drawer = newDrawer;
+
         return changeMap;
+    }
+
+    private void changeCurrency(TreeMap<Currency, Integer> drawer, Currency curreny, int amount)
+    {
+        drawer.put(curreny, drawer.get(curreny)+amount);
     }
 
     private TreeMap<Currency, Integer> combineDrawers(TreeMap<Currency, Integer> drawer1, TreeMap<Currency, Integer> drawer2)
@@ -73,7 +76,7 @@ public class Drawer
 
         for(Currency c : newDrawer.keySet())
         {
-            drawer.put(c, drawer1.get(c)+drawer2.get(c));
+            newDrawer.put(c, drawer1.get(c)+drawer2.get(c));
         }
 
         return newDrawer;
@@ -112,7 +115,7 @@ public class Drawer
         }
     }
 
-    private float valueOfCurrencyGiven(TreeMap<Currency, Integer> currencyGiven)
+    public static float valueOfCurrencyMap(TreeMap<Currency, Integer> currencyGiven)
     {
         float value = 0;
         for(Currency c : currencyGiven.keySet())
@@ -121,5 +124,10 @@ public class Drawer
         }
 
         return value;
+    }
+
+    public static float formatFloat(float f)
+    {
+        return Float.parseFloat(FORMATTER.format(f));
     }
 }

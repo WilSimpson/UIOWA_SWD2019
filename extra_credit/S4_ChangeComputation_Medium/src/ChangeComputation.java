@@ -4,12 +4,13 @@ import java.util.TreeMap;
 
 public class ChangeComputation
 {
-    private static final DecimalFormat FORMATTER = new DecimalFormat("0.00");
+
     private Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args)
     {
         (new ChangeComputation()).run();
+        System.out.println("\n\nBYE!");
     }
 
     public void run()
@@ -26,21 +27,76 @@ public class ChangeComputation
 
         drawer.setItemPrice(itemPrice);
 
-        System.out.println("Start entering transactions!\n");
+        System.out.println("\nStart entering transactions!");
 
-        int numberTransactions = 0;
+        boolean continueRunning = true;
 
-        System.out.println("Transaction "+numberTransactions+1+":");
-        TreeMap<Currency, Integer> currencyGiven = Drawer.generateEmptyCurrencyMap();
-
-        System.out.println("Transaction "+numberTransactions+1+": Enter amount of each currency given.");
-        for(Currency c : currencyGiven.keySet())
+        while(continueRunning)
         {
-            currencyGiven.put(c, getIntegerInput(c+": \t"));
+            int numberTransactions = 0;
+
+            TreeMap<Currency, Integer> currencyGiven = Drawer.generateEmptyCurrencyMap();
+
+            System.out.println("\n\nCurrent drawer:");
+            drawer.printDrawerContents();
+
+            System.out.println("\n\nTransaction "+numberTransactions+1+": Enter amount of each currency given.");
+            for(Currency c : currencyGiven.keySet())
+            {
+                currencyGiven.put(c, getIntegerInput(c+": \t"));
+            }
+
+            try
+            {
+                TreeMap<Currency, Integer> change = drawer.processTransaction(currencyGiven);
+                System.out.println("Transaction processed!");
+            }
+            catch(TransactionException ex)
+            {
+                switch(ex.getResult())
+                {
+                    case INSUFFICIENT_CHANGE:
+                        System.out.println("Unable to process the transaction due to insufficient change in the drawer!" +
+                            "\nThe transaction has been canceled and has not effected the drawer.");
+                        break;
+
+                    case INSUFFICIENT_FUNDS:
+                        System.out.println("Unable to processes transaction due to insufficient funds given." +
+                            "\nThe transaction has been canceled and has not effected the drawer.");
+                        break;
+
+                    default:
+                        System.out.println("UNKNOWN ERROR! Transaction has been canceled!");
+                }
+            }
+
+
+            System.out.println("\n\nCurrent drawer:");
+            drawer.printDrawerContents();
+
+            continueRunning = askToContinue();
+
+
         }
 
-        drawer.processTransaction(currencyGiven);
     }
+
+    private boolean askToContinue()
+    {
+
+        int response;
+        do
+        {
+            response = getIntegerInput("\n\nWould you like to continue?",
+                    "1. Yes" +
+                            "\n2. No" +
+                            "\nResponse: ");
+        }
+        while(response != 1 && response != 2);
+
+        return response == 1;
+    }
+
 
     private float getFloatInput(String messageHeader, String message)
     {
@@ -60,13 +116,10 @@ public class ChangeComputation
             }
         }
 
-        return formatFloat(f);
+        return Drawer.formatFloat(f);
     }
 
-    public float formatFloat(float f)
-    {
-        return Float.parseFloat(FORMATTER.format(f));
-    }
+
 
 
     private int getIntegerInput(String message)
