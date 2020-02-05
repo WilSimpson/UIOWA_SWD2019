@@ -3,6 +3,14 @@ import java.util.*;
 /**
  * A menu consists of a header and options. This class handles printing the choices to the screen as well as retrieving
  * the answer. If an incorrect value is entered this class handles asking again for a valid answer.
+ *
+ * A better design for the options map would be to have a list of a class MenuOptions which is an abstract class. Which
+ * would be implemented by ScoringMenuOption and GameMenuOption. These classes would have a scoring method with a team
+ * as well as a game attached to them respectively. Then responding with indexes of an array/list/map would not be
+ * needed. Returning a MenuOption would be used instead. Casting the MenuOption to the correct object then getting their
+ * respective values.
+ *
+ * @author Wil Simpson
  */
 public class Menu
 {
