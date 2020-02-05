@@ -1,10 +1,10 @@
 /**
- * A simple cypher that shifts a message by any number given an alphabet. The alphabet is given by the alphabet array
- * and intends to be used with A-Z OR A-Z + 0-9
+ * The encrypter creates a known alphabet of size 36 containing the letters A through Z and 0 through 9 in that order.
+ * Use the encryptLetter to encrypt a single char or a whole message through the encryptMessage method.
  *
  * @author Wil Simpson
  */
-public class OneTimePad
+public class Encrypter
 {
     /**
      * List of all capital letters from A to Z in order directly followed by 0 through 9 in order.
@@ -12,22 +12,9 @@ public class OneTimePad
     private static final char alphabet[] =
             {
                     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-                    'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
-            };//'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-        //};
-
-    /**
-     * Start of the program. No command line arguments are needed. Example given is the same one
-     *
-     * @param args command line arguments.
-     */
-    public static void main(String[] args)
-    {
-        String message = "MEET ME AT THREE.";
-
-        System.out.println(message);
-        System.out.println(encryptMessage(message, 13));
-    }
+                    'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+                    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
+            };
 
     /**
      * Shifts the given char by the given shift size. Only encrypts letter if it's apart of the alphabet.
@@ -36,7 +23,7 @@ public class OneTimePad
      * @param shiftSize amount to shift char by
      * @return new shifted char value
      */
-    public static char encryptLetter(char c, int shiftSize)
+    public char encryptLetter(char c, int shiftSize)
     {
         if(!shouldEncryptChar(c)) return c;
 
@@ -53,14 +40,14 @@ public class OneTimePad
      * @param shiftSize amount to shift each character
      * @return encrypted message
      */
-    public static String encryptMessage(String message, int shiftSize)
+    public String encryptMessage(String message, int shiftSize)
     {
         char[] originalMessage = message.toUpperCase().toCharArray();
         String encryptedMessage = "";
 
         for(int i=0; i<originalMessage.length; i++)
         {
-            encryptLetter(originalMessage[i], shiftSize);
+            encryptedMessage += encryptLetter(originalMessage[i], shiftSize);
         }
 
         return encryptedMessage;
@@ -72,7 +59,7 @@ public class OneTimePad
      * @param c char to check
      * @return whether the char is in the alphabet
      */
-    private static boolean shouldEncryptChar(char c)
+    private boolean shouldEncryptChar(char c)
     {
         for(char currentChar : alphabet)
         {
@@ -89,7 +76,7 @@ public class OneTimePad
      * @param letter letter to search for in the array
      * @return index of the letter in the array
      */
-    public static int letterToIndex(char letter)
+    private int letterToIndex(char letter)
     {
         for(int i=0; i<alphabet.length; i++)
         {
@@ -106,12 +93,10 @@ public class OneTimePad
      * @param index index of letter in array
      * @return letter in array at the given index
      */
-    public static char indexToLetter(int index)
+    private char indexToLetter(int index)
     {
         if(index < 0 || index > alphabet.length) return 0;
 
         return alphabet[index];
     }
-
-
 }
