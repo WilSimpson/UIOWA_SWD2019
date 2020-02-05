@@ -1,26 +1,45 @@
-public class Tetrahedron extends ThreeDimensionalShape {
+/**
+ * A simple 3D shape that is defined by the length of a single edge
+ */
+public class Tetrahedron extends ThreeDimensionalShape
+{
 
-    private int edgeLength;
+    /**
+     * Length of a single edge
+     */
+    private double edgeLength;
 
-    public Tetrahedron(int edgeLength) {
+    /**
+     * Creates a tetrahedron given the length of a single edge
+     *
+     * @param edgeLength length of a single edge
+     */
+    public Tetrahedron(double edgeLength)
+    {
         this.edgeLength = edgeLength;
     }
 
     /**
-     * @source Formula for calculating volume area of a tetrahedron courtesy of https://study.com/academy/lesson/volume-surface-area-of-a-tetrahedron.html
-     * @return
+     * Calculates the volume of the tetrahedron
+     * Formula for calculating volume area of a tetrahedron courtesy of https://study.com/academy/lesson/volume-surface-area-of-a-tetrahedron.html
+     *
+     * @return volume of the tetrahedron
      */
     @Override
-    double getVolume() {
+    public double getVolume()
+    {
         return Math.sqrt(2) * Math.pow(edgeLength, 3) / 12;
     }
 
     /**
-     * @source Formula for calculating volume area of a tetrahedron courtesy of https://study.com/academy/lesson/volume-surface-area-of-a-tetrahedron.html
-     * @return
+     * Calculates the surface area of the tetrahedron
+     * Formula for calculating volume area of a tetrahedron courtesy of https://study.com/academy/lesson/volume-surface-area-of-a-tetrahedron.html
+     *
+     * @return surface area of the tetrahedron
      */
     @Override
-    double getArea() {
+    public double getArea()
+    {
         return Math.sqrt(3) * edgeLength * edgeLength;
     }
 }
