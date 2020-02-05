@@ -1,5 +1,5 @@
 /**
- * The encrypter creates a known alphabet of size 36 containing the letters A through Z and 0 through 9 in that order.
+ * The encrypter creates a known alphabet of size 26 containing the letters A through Z.
  * Use the encryptLetter to encrypt a single char or a whole message through the encryptMessage method.
  *
  * @author Wil Simpson
@@ -7,13 +7,12 @@
 public class Encrypter
 {
     /**
-     * List of all capital letters from A to Z in order directly followed by 0 through 9 in order.
+     * List of all capital letters from A to Z in order.
      */
     private static final char alphabet[] =
             {
                     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-                    'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-                    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
+                    'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
             };
 
     /**
@@ -87,7 +86,7 @@ public class Encrypter
     }
 
     /**
-     * Expects an index inclusively between 0 and 35 and converts that into a letter given the alphabet array. If an
+     * Expects an index inclusively between 0 and 25 and converts that into a letter given the alphabet array. If an
      * invalid index is given a value of 0 is returned.
      *
      * @param index index of letter in array
