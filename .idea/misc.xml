@@ -10,7 +10,7 @@
     <option name="OPTION_DOCUMENT_TAG_AUTHOR" value="true" />
     <option name="OPTION_DOCUMENT_TAG_VERSION" value="true" />
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="false" project-jdk-name="11.0.1" project-jdk-type="JavaSDK">
-    <output url="file://$USER_HOME$/test_project_output_path" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="false" project-jdk-name="14-ea" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/../test_project_output_path" />
   </component>
 </project>
