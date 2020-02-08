@@ -47,32 +47,32 @@ public class GuessNumber extends JPanel
     /**
      * Top label for the GUI explaining how to play the game
      */
-    private JLabel topLabel;
+    private final JLabel topLabel;
 
     /**
      * Textfield the user will enter their guess in
      */
-    private JTextField guessField;
+    private final JTextField guessField;
 
     /**
      * Label explaining whether the guess was invalid or if their guess was too high, too low or correct
      */
-    private JLabel guessLabel;
+    private final JLabel guessLabel;
 
     /**
      * Button to press when the user wants to make a guess
      */
-    private JButton guessButton;
+    private final JButton guessButton;
 
     /**
      * Button to press to start a new game
      */
-    private JButton newGameButton;
+    private final JButton newGameButton;
 
     /**
      * The default background color for the program
      */
-    private Color defaultBackgroundColor;
+    private final Color defaultBackgroundColor;
 
     /**
      * Gets the guess from the textfield input
