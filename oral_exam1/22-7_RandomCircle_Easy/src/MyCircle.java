@@ -26,7 +26,7 @@ public class MyCircle {
      * and the MAX_RADIUS.
      */
     public MyCircle() {
-        this.radius = (int) Math.floor(Math.random()*(MAX_RADIUS-MIN_RADIUS)) + MIN_RADIUS;
+        this.radius = (int) Math.round(Math.random()*(MAX_RADIUS-MIN_RADIUS)) + MIN_RADIUS;
     }
 
     /**

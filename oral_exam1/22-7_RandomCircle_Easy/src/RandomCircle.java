@@ -12,10 +12,25 @@ import java.awt.*;
  */
 public class RandomCircle
 {
+    /**
+     * Circle that we will use
+     */
     private MyCircle circle;
+
+    /**
+     * Panel that will draw our circle
+     */
     private CirclePanel panel;
+
+    /**
+     * Text area to print information about the circle
+     */
     private JTextArea textArea;
 
+    /**
+     * Initializes all the elements for the GUI. Creates a new random circle. Calculates the values and puts them in the
+     * textarea. Puts everything in the frame and and makes it visible.
+     */
     public void run()
     {
         //The frame the application will be using
@@ -45,7 +60,10 @@ public class RandomCircle
         frame.setVisible(true);
     }
 
-    private synchronized final void setupTextArea()
+    /**
+     * Setups the textarea to contain all of the information about the circle
+     */
+    private void setupTextArea()
     {
         //Clear the textArea
         textArea.selectAll();

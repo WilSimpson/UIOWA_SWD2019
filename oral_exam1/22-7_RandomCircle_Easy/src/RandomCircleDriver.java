@@ -1,11 +1,6 @@
 /**
- * The main class that starts the program.
- *
- * @TODO: Go over JavaDocs and inline comments to make sure they are sufficient and correct
- *
- *
- * @FUNTODO: Add a option to create a new circle by "File -> Generate New Circle"
- *
+ * The main class that starts the program to create the GUI.
+
  * @author Wil Simpson
  */
 public class RandomCircleDriver
