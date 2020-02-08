@@ -1,19 +1,24 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class GuessNumber extends JFrame
+public class GuessNumber extends JPanel
 {
+    private static final String GUESS_FIELD_DEFAULT_TEXT = "Enter your guess here";
+    private static final String GUESS_LABEL_DEFAULT_TEXT = "";
+
+
     private int number;
     private Integer previousGuess = null;
 
-    private JLabel topLabel = new JLabel("I have a number between 1 and 1000. Can you guess my number?" +
-            "\nPlease enter your first guess.");
+    private JLabel topLabel;
     private JTextField guessField;
     private JLabel guessLabel;
     private JButton guessButton;
     private JButton newGameButton;
 
     private boolean isRunning = false;
+
+    private GuessWorker worker;
 
     public int getGuess()
     {
@@ -22,58 +27,61 @@ public class GuessNumber extends JFrame
 
     public GuessNumber()
     {
-        super("Guess Number");
+        super(new GridLayout(5,1));
 
-
-
-        //Generate a random number
-        newGame();
-
-
+        number = (int) (Math.random()*1000+1);
 
         System.out.println(number);
 
+        Dimension buttonDimension = new Dimension(300, 20);
+
         //Setup the frame
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(new Dimension(350,350));
-        getContentPane().setBackground(Color.WHITE);
+
+        topLabel = new JLabel("I have a number between 1 and 1000. Can you guess my number? " +
+                "\nPlease enter your first guess.");
+        topLabel.setSize(new Dimension(300, 20));
+        topLabel.setLocation(0,0);
 
         //Setup where user will enter guess
-        guessField = new JTextField("Enter your guess here");
+        guessField = new JTextField(GUESS_FIELD_DEFAULT_TEXT);
         guessField.setSize(new Dimension(300, 50));
         guessField.setLocation(25, 5);
 
-
-
         //Setup the Guess! button
         guessButton = new JButton("Guess!");
-        guessButton.setSize(new Dimension(300, 20));
+        guessButton.setSize(buttonDimension);
         guessButton.setLocation(25,60);
 
         //Setup the guess label
-        guessLabel = new JLabel("");
+        guessLabel = new JLabel(GUESS_LABEL_DEFAULT_TEXT);
         guessLabel.setSize(new Dimension(300, 20));
         guessLabel.setLocation(25, 80);
 
-        //Setup the button listener
-
-
-        newGameButton = new JButton("NEW GAME");
-        newGameButton.setSize(new Dimension(300, 20));
+        //Setup the new game button
+        newGameButton = new JButton("New Game");
+        newGameButton.setSize(buttonDimension);
         newGameButton.setLocation(25, 100);
         newGameButton.setVisible(false);
+        newGameButton.setEnabled(false);
 
-
-
-        GuessWorker worker = new GuessWorker(this);
+        //Setup the listeners
+        worker = new GuessWorker(this);
         guessField.addActionListener(e -> worker.processGuess());
         guessButton.addActionListener(e -> worker.processGuess());
-        newGameButton.addActionListener(e -> worker.processGuess());
+        newGameButton.addActionListener(e -> worker.newGame());
     }
 
     public void newGame()
     {
         number = (int) (Math.random()*1000+1);
+        previousGuess = null;
+
+        guessLabel.setText(GUESS_LABEL_DEFAULT_TEXT);
+        guessField.setText(GUESS_FIELD_DEFAULT_TEXT);
+        setBackground(Color.WHITE);
+
+        System.out.println(number);
     }
 
     public boolean run()
@@ -86,6 +94,7 @@ public class GuessNumber extends JFrame
             add(guessField);
             add(guessButton);
             add(guessLabel);
+            add(newGameButton);
 
             setVisible(true);
 
@@ -142,16 +151,14 @@ public class GuessNumber extends JFrame
         return (Math.abs(guess-number)) <= (Math.abs(previousGuess-number)) ? GuessResult.CLOSER : GuessResult.FURTHER;
     }
 
-    public void toggleMode()
+    public synchronized void toggleMode()
     {
         newGameButton.setEnabled(!newGameButton.isEnabled());
-        guessButton.setEnabled(!newGameButton.isEnabled());
-        guessField.setEnabled(!newGameButton.isEnabled());
+        guessButton.setEnabled(!guessButton.isEnabled());
+        guessField.setEnabled(!guessField.isEnabled());
+
+        newGameButton.setVisible(!newGameButton.isVisible());
     }
 
-    public static void main(String[] args)
-    {
-        GuessNumber game = new GuessNumber();
-        game.run();
-    }
+
 }

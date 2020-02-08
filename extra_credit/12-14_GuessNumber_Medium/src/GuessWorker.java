@@ -15,6 +15,12 @@ public class GuessWorker<T, V> extends SwingWorker<T, V>
         doInBackground();
     }
 
+    public void newGame()
+    {
+        game.newGame();
+        game.toggleMode();
+    }
+
     @Override
     protected T doInBackground()
     {
@@ -32,26 +38,28 @@ public class GuessWorker<T, V> extends SwingWorker<T, V>
 
             GuessResult result = game.makeGuess(guess);
 
-            if (result == GuessResult.CORRECT)
+            synchronized(this)
             {
-                game.toggleMode();
-                game.setGuessLabel("CORRECT");
-                game.getContentPane().setBackground(Color.GREEN);
-            }
-            else
-            {
-                game.setGuessLabel(game.isGuessHigh(guess) ? "Too High!" : "Too Low");
-
-                if (result == GuessResult.CLOSER)
+                if (result == GuessResult.CORRECT)
                 {
-                    game.getContentPane().setBackground(Color.BLUE);
+                    game.toggleMode();
+                    game.setGuessLabel("CORRECT");
+                    game.setBackground(Color.GREEN);
                 }
-                else if(result == GuessResult.FURTHER)
+                else
                 {
-                    game.getContentPane().setBackground(Color.RED);
+                    game.setGuessLabel(game.isGuessHigh(guess) ? "Too High!" : "Too Low");
+
+                    if (result == GuessResult.CLOSER)
+                    {
+                        game.setBackground(Color.BLUE);
+                    }
+                    else if(result == GuessResult.FURTHER)
+                    {
+                        game.setBackground(Color.RED);
+                    }
                 }
             }
-
             System.out.println(result);
         }
         catch (NumberFormatException ex)
