@@ -35,6 +35,7 @@ public class RandomCircle
     {
         //The frame the application will be using
         JFrame frame = new JFrame("Random Circle");
+        frame.getContentPane().setBackground(Color.WHITE);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
