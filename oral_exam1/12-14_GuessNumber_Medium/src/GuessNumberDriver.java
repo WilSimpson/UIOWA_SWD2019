@@ -11,7 +11,7 @@ public class GuessNumberDriver
     {
         //Create a new frame
         JFrame frame = new JFrame("Guess Number");
-        frame.setDefaultCloseOperation(JInternalFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Create the panel
         GuessNumber game = new GuessNumber();
