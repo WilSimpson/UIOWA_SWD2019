@@ -35,6 +35,7 @@ public class RandomCircle extends JFrame
     public RandomCircle()
     {
         super("Random Circle");
+        circle = new MyCircle();
         panel = new CirclePanel(circle);
         textArea = new JTextArea(4, 1);
 
@@ -50,7 +51,7 @@ public class RandomCircle extends JFrame
         newCircleMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, ActionEvent.CTRL_MASK));
 
         fileMenu.add(newCircleMenuItem);
-        add(menuBar);
+        setJMenuBar(menuBar);
 
         //Setup the textarea and make it look good
         textArea.setLineWrap(false);
@@ -61,8 +62,6 @@ public class RandomCircle extends JFrame
         //Add all components to the frame
         add(panel, BorderLayout.NORTH);
         add(textArea, BorderLayout.SOUTH);
-
-
     }
 
     /**
