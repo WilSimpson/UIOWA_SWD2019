@@ -1,6 +1,8 @@
 import javax.swing.*;
 import javax.swing.text.StyledDocument;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 
 /**
  * This class constructs a new JFrame and paints a randomly sized circle with
@@ -10,7 +12,7 @@ import java.awt.*;
  *
  * @author Wil Simpson
  */
-public class RandomCircle
+public class RandomCircle extends JFrame
 {
     /**
      * Circle that we will use
@@ -20,29 +22,35 @@ public class RandomCircle
     /**
      * Panel that will draw our circle
      */
-    private CirclePanel panel;
+    private final CirclePanel panel;
 
     /**
      * Text area to print information about the circle
      */
-    private JTextArea textArea;
+    private final JTextArea textArea;
 
     /**
-     * Initializes all the elements for the GUI. Creates a new random circle. Calculates the values and puts them in the
-     * textarea. Puts everything in the frame and and makes it visible.
+     * Creates the default values for the member variables
      */
-    public void run()
+    public RandomCircle()
     {
-        //The frame the application will be using
-        JFrame frame = new JFrame("Random Circle");
-        frame.getContentPane().setBackground(Color.WHITE);
-
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        //Create our circle then create the circle and textarea panels
-        circle = new MyCircle();
+        super("Random Circle");
         panel = new CirclePanel(circle);
-        textArea = new JTextArea(1, 1);
+        textArea = new JTextArea(4, 1);
+
+        //Setup frame
+        getContentPane().setBackground(Color.WHITE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JMenuBar menuBar = new JMenuBar();
+        JMenu fileMenu = new JMenu("Edit");
+        JMenuItem newCircleMenuItem = new JMenuItem("New Circle");
+
+        newCircleMenuItem.setMnemonic(KeyEvent.VK_N);
+        newCircleMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, ActionEvent.CTRL_MASK));
+
+        fileMenu.add(newCircleMenuItem);
+        add(menuBar);
 
         //Setup the textarea and make it look good
         textArea.setLineWrap(false);
@@ -50,21 +58,32 @@ public class RandomCircle
         textArea.setBackground(Color.WHITE);
         textArea.setMargin(new Insets(10, 10, 0, 10));
 
-        setupTextArea();
-
         //Add all components to the frame
-        frame.add(panel, BorderLayout.NORTH);
-        frame.add(textArea, BorderLayout.SOUTH);
+        add(panel, BorderLayout.NORTH);
+        add(textArea, BorderLayout.SOUTH);
+
+
+    }
+
+    /**
+     * Creates a new circle and shows it's properties to the user
+     */
+    public void run()
+    {
+        circle = new MyCircle();
+
+        //Calculate the circle properties and setup the text area with their values
+        generateTextArea();
 
         //Pack the frame to fit everything perfectly and make it visible
-        frame.pack();
-        frame.setVisible(true);
+        pack();
+        setVisible(true);
     }
 
     /**
      * Setups the textarea to contain all of the information about the circle
      */
-    private void setupTextArea()
+    private void generateTextArea()
     {
         //Clear the textArea
         textArea.selectAll();
