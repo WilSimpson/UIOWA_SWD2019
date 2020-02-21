@@ -271,6 +271,7 @@
       <module fileurl="file://$PROJECT_DIR$/scratch/scratch.iml" filepath="$PROJECT_DIR$/scratch/scratch.iml" />
       <module fileurl="file://$PROJECT_DIR$/textbook_examples/supplemental/supplemental.iml" filepath="$PROJECT_DIR$/textbook_examples/supplemental/supplemental.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/swd2019.iml" filepath="$PROJECT_DIR$/.idea/swd2019.iml" />
+      <module fileurl="file://$PROJECT_DIR$/scratch/test/test.iml" filepath="$PROJECT_DIR$/scratch/test/test.iml" />
       <module fileurl="file://$PROJECT_DIR$/textbook_examples/textbook_examples.iml" filepath="$PROJECT_DIR$/textbook_examples/textbook_examples.iml" />
     </modules>
   </component>
