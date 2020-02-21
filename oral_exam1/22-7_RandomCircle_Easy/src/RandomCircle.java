@@ -1,8 +1,9 @@
 import javax.swing.*;
-import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
 
 /**
  * This class constructs a new JFrame and paints a randomly sized circle with
@@ -15,42 +16,42 @@ import java.awt.event.KeyEvent;
 public class RandomCircle extends JFrame
 {
     /**
-     * Circle that we will use
-     */
-    private MyCircle circle;
-
-    /**
      * Panel that will draw our circle
      */
-    private final CirclePanel panel;
+    private final CirclePanel panel = new CirclePanel(new MyCircle());
 
     /**
      * Text area to print information about the circle
      */
-    private final JTextArea textArea;
+    private final JTextArea textArea = new JTextArea(4, 1);
 
     /**
-     * Creates the default values for the member variables
+     * Creates a new panel and sets up the frame
      */
     public RandomCircle()
     {
         super("Random Circle");
-        circle = new MyCircle();
-        panel = new CirclePanel(circle);
-        textArea = new JTextArea(4, 1);
 
         //Setup frame
         getContentPane().setBackground(Color.WHITE);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        //Setup the menubar
         JMenuBar menuBar = new JMenuBar();
-        JMenu fileMenu = new JMenu("Edit");
+        JMenu fileMenu = new JMenu("File");
         JMenuItem newCircleMenuItem = new JMenuItem("New Circle");
+        JMenuItem exitMenuItem = new JMenuItem("Exit");
+
+        newCircleMenuItem.addActionListener(e-> newCircle());
+        exitMenuItem.addActionListener(e->dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING)));
 
         newCircleMenuItem.setMnemonic(KeyEvent.VK_N);
-        newCircleMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, ActionEvent.CTRL_MASK));
+        newCircleMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
 
+        //Combine menu components and add to the frame
         fileMenu.add(newCircleMenuItem);
+        fileMenu.add(exitMenuItem);
+        menuBar.add(fileMenu);
         setJMenuBar(menuBar);
 
         //Setup the textarea and make it look good
@@ -65,18 +66,29 @@ public class RandomCircle extends JFrame
     }
 
     /**
-     * Creates a new circle and shows it's properties to the user
+     * Generates the text, packs and shows the frame. Frame will not show until this method is called.
      */
     public void run()
     {
-        circle = new MyCircle();
+        //Generate text, pack and show the frame
+        generateTextArea();
+        pack();
+        setVisible(true);
+    }
+
+    /**
+     * Generates a new circle and shows it's properties to the user
+     */
+    private void newCircle()
+    {
+        //Generate a new circle
+        panel.generateNewCircle();
 
         //Calculate the circle properties and setup the text area with their values
         generateTextArea();
 
-        //Pack the frame to fit everything perfectly and make it visible
+        //Repack the frame to fit everything perfectly
         pack();
-        setVisible(true);
     }
 
     /**
@@ -87,6 +99,8 @@ public class RandomCircle extends JFrame
         //Clear the textArea
         textArea.selectAll();
         textArea.replaceSelection("");
+
+        MyCircle circle = panel.getCircle();
 
         //Add all of the required information to the textarea
         textArea.append(String.format("AREA: %.2f %n", circle.getArea()));

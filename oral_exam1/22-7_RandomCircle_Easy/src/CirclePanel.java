@@ -42,6 +42,33 @@ public class CirclePanel extends JPanel {
     }
 
     /**
+     * The constructor creates a MyCircle and setups the working space for the panel
+     */
+    public CirclePanel()
+    {
+        this(new MyCircle());
+    }
+
+    /**
+     * Generates a new circle and repaints the panel
+     */
+    public void generateNewCircle()
+    {
+        circle = new MyCircle();
+        repaint();
+    }
+
+    /**
+     * Gets the circle that is being drawn
+     *
+     * @return circle that is being drawn
+     */
+    public MyCircle getCircle()
+    {
+        return circle;
+    }
+
+    /**
      * Overriding the preferred size to that of the exact size of the MyCircle object
      *
      * @return Dimension that exactly contains the circle
