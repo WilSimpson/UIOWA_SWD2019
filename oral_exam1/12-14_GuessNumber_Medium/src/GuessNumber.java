@@ -94,7 +94,7 @@ public class GuessNumber extends JPanel
         defaultBackgroundColor = getBackground();
 
         //Generates a random number for the game
-        number = getRandomNumber(MIN_VALUE, 1000);
+        number = getRandomNumber(MIN_VALUE, MAX_VALUE);
 
         //Logs the number to the console
         System.out.println(number);
@@ -288,5 +288,15 @@ public class GuessNumber extends JPanel
     public boolean isGameOver()
     {
         return newGameButton.isVisible();
+    }
+
+    /**
+     * Gets the number the user is currently guessing for
+     *
+     * @return number user is guessing for
+     */
+    public int getNumber()
+    {
+        return number;
     }
 }
