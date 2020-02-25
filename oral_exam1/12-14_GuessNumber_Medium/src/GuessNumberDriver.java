@@ -16,12 +16,16 @@ public class GuessNumberDriver
         //Create the panel
         GuessNumber game = new GuessNumber();
 
+        //Create a menu bar and add menu items with actions
         JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu("File");
         menuBar.add(menu);
-        JMenuItem showNumberMenuItem = new JMenuItem("Show number");
+        JMenuItem showNumberMenuItem = new JMenuItem("Show Number");
         menu.add(showNumberMenuItem);
         showNumberMenuItem.addActionListener(e -> JOptionPane.showMessageDialog(frame, game.getNumber()));
+        JMenuItem newGameMenuItem = new JMenuItem("New Game");
+        menu.add(newGameMenuItem);
+        newGameMenuItem.addActionListener(e -> game.newGame(false));
         frame.setJMenuBar(menuBar);
 
         //Add the panel, set the size and show the GUI
