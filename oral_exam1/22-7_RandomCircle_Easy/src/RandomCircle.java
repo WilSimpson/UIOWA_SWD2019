@@ -73,6 +73,7 @@ public class RandomCircle extends JFrame
         //Generate text, pack and show the frame
         generateTextArea();
         pack();
+        setMinimumSize(getSize());
         setVisible(true);
     }
 
@@ -81,6 +82,8 @@ public class RandomCircle extends JFrame
      */
     private void newCircle()
     {
+        setMinimumSize(null);
+
         //Generate a new circle
         panel.generateNewCircle();
 
@@ -89,6 +92,8 @@ public class RandomCircle extends JFrame
 
         //Repack the frame to fit everything perfectly
         pack();
+
+        setMinimumSize(getSize());
     }
 
     /**
