@@ -17,7 +17,7 @@ public class GuessNumber extends JPanel
     /**
      * Default value for the guess text field
      */
-    private static final String GUESS_FIELD_DEFAULT_TEXT = "Enter your guess here";
+    private static final String GUESS_FIELD_DEFAULT_TEXT = "Please enter your first guess.";
 
     /**
      * Default value for the guess label field
@@ -164,13 +164,13 @@ public class GuessNumber extends JPanel
                 //previous guess set the color to blue otherwise set to red
                 setGuessLabel(isGuessHigh(guess) ? "Too High!" : "Too Low");
 
-                if (result == GuessResult.CLOSER)
-                {
-                    setBackground(Color.BLUE);
-                }
-                else if(result == GuessResult.FURTHER)
+                if(result == GuessResult.FURTHER)
                 {
                     setBackground(Color.RED);
+                }
+                else
+                {
+                    setBackground(Color.BLUE);
                 }
             }
         }
