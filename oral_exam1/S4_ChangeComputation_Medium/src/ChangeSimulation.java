@@ -71,7 +71,7 @@ public class ChangeSimulation
             try
             {
                 Currencies change = drawer.processTransaction(currencyGiven);
-                System.out.println("Transaction processed! Given change: $"+change.getValue());
+                System.out.println("\n\nTransaction processed! Given change: $"+change.getValue());
                 change.print();
 
                 //Show the drawer after the transaction
@@ -149,7 +149,7 @@ public class ChangeSimulation
             }
             catch(NumberFormatException e)
             {
-                System.out.println("ERROR: MUST ENTER A NUMBER!");
+                System.out.println("ERROR: MUST ENTER A NUMBER!\n");
             }
         }
 
