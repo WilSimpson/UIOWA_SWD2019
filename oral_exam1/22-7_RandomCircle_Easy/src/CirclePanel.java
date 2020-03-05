@@ -8,7 +8,8 @@ import java.awt.*;
  *
  * @author Wil Simpson
  */
-public class CirclePanel extends JPanel {
+public class CirclePanel extends JPanel
+{
 
     /**
      * Minimum distance circle will be from all directions to the edge of the panel
@@ -35,7 +36,8 @@ public class CirclePanel extends JPanel {
      *
      * @param circle the MyCircle object that is to be drawn
      */
-    public CirclePanel(MyCircle circle) {
+    public CirclePanel(MyCircle circle)
+    {
         this.circle = circle;
         setBounds(0, 0, PANEL_WIDTH, PANEL_HEIGHT);
         setBackground(Color.WHITE);
@@ -74,7 +76,8 @@ public class CirclePanel extends JPanel {
      * @return Dimension that exactly contains the circle
      */
     @Override
-    public Dimension getPreferredSize() {
+    public Dimension getPreferredSize()
+    {
         //The dimension of the circle is the preferred size plus the minimum distance defined by CIRCLE_EDGE_OFFSET
         //Value must be multiplied by two to calculate for all 4 sides of the circle
         return new Dimension(circle.getRadius()+CIRCLE_EDGE_OFFSET*2, circle.getRadius()+CIRCLE_EDGE_OFFSET*2);
@@ -86,7 +89,8 @@ public class CirclePanel extends JPanel {
      * @param g the graphics object required to draw our circle
      */
     @Override
-    public void paintComponent(Graphics g) {
+    public void paintComponent(Graphics g)
+    {
         super.paintComponent(g);
         g.setColor(Color.BLACK);
         g.drawOval(CIRCLE_EDGE_OFFSET, CIRCLE_EDGE_OFFSET, circle.getRadius(), circle.getRadius());

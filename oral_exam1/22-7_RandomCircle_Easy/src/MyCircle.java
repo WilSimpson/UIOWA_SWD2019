@@ -5,7 +5,8 @@
  *
  * @author Wil Simpson
  */
-public class MyCircle {
+public class MyCircle
+{
     /**
      * The minimum radius the circle may be
      */
@@ -25,7 +26,8 @@ public class MyCircle {
      * Constructs the MyCircle object with no params. Randomly generates the circle inclusively between the MIN_RADIUS
      * and the MAX_RADIUS.
      */
-    public MyCircle() {
+    public MyCircle()
+    {
         this.radius = (int) Math.round(Math.random()*(MAX_RADIUS-MIN_RADIUS)) + MIN_RADIUS;
     }
 
@@ -34,7 +36,8 @@ public class MyCircle {
      *
      * @return the radius of the circle
      */
-    public int getRadius() {
+    public int getRadius()
+    {
         return radius;
     }
 
@@ -43,7 +46,8 @@ public class MyCircle {
      *
      * @return the diameter of the circle
      */
-    public int getDiameter() {
+    public int getDiameter()
+    {
         return 2 * radius;
     }
 
@@ -52,7 +56,8 @@ public class MyCircle {
      *
      * @return the area of the circle
      */
-    public double getArea() {
+    public double getArea()
+    {
         return Math.PI * radius * radius;
     }
 
@@ -61,7 +66,8 @@ public class MyCircle {
      *
      * @return the circumference of the circle
      */
-    public double getCircumference() {
+    public double getCircumference()
+    {
         return Math.PI * 2 * radius;
     }
 }
