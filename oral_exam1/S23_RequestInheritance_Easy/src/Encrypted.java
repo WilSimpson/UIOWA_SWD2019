@@ -5,7 +5,17 @@
  */
 public interface Encrypted
 {
+    /**
+     * Get the encryption scheme
+     *
+     * @return the encryption scheme
+     */
     String getEncryptionScheme();
 
+    /**
+     * Set the encryption scheme
+     *
+     * @param encryptionScheme new encryption scheme to use
+     */
     void setEncryptionScheme(String encryptionScheme);
 }
