@@ -1,5 +1,5 @@
 /**
- * Runs the program
+ * Runs the program. Creates an instance of OneTimePad and runs it.
  *
  * @author Wil Simpson
  */
