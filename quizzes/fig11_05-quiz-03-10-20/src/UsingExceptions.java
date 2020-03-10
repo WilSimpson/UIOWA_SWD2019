@@ -8,7 +8,6 @@ public class UsingExceptions {
         } catch (Exception exception) // exception thrown by throwException
         {
             System.err.println("Exception handled in main");
-            System.err.println(exception);
         }
 
         doesNotThrowException();
@@ -42,6 +41,7 @@ public class UsingExceptions {
         try // try block does not throw an exception
         {
             System.out.println("Method doesNotThrowException");
+            throw new Exception();
         } catch (Exception exception) // does not execute
         {
             System.err.println(exception);
