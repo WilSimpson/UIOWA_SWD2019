@@ -5,6 +5,8 @@ public class OrderBuffer
     private Order order;
     private ArrayBlockingQueue<Order> queue;
 
+    private boolean upstreamFinished = false;
+
     public OrderBuffer()
     {
         this(1);
@@ -14,8 +16,6 @@ public class OrderBuffer
     {
         queue = new ArrayBlockingQueue<>(queueSize);
     }
-
-    private boolean upstreamFinished = false;
 
     public synchronized void putBlocking(Order order)
     {
@@ -55,27 +55,27 @@ public class OrderBuffer
         return order;
     }
 
-    public void setUpstreamFinished()
+    public synchronized void setUpstreamFinished()
     {
         upstreamFinished = true;
     }
 
-    public boolean isUpstreamFinished()
+    public synchronized boolean isUpstreamFinished()
     {
         return upstreamFinished;
     }
 
-    public boolean isBufferEmpty()
+    public synchronized boolean isBufferEmpty()
     {
         return queue.size() == 0;
     }
 
-    public boolean isBufferFull()
+    public synchronized boolean isBufferFull()
     {
         return queue.remainingCapacity() == 0;
     }
 
-    public boolean shouldContinueAcceptingInput()
+    public synchronized boolean shouldContinueAcceptingInput()
     {
         return !(isUpstreamFinished() && isBufferEmpty());
     }

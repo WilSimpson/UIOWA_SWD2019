@@ -23,7 +23,7 @@ public class AmazonOrderProcessor
         OrderBuffer sd2_dt2 = new OrderBuffer(4);
 
         ExecutorService es = Executors.newCachedThreadPool();
-        es.execute(new AmazonWebServer(aws_sc1, aws_sc2, "/home/wil/IdeaProjects/wsimpson_swd/oral_exam2/S24_AmazonOrderProcessing_Hard/src/S24_AmazonOrderProcessing_OrdersFile.csv"));
+        es.execute(new AmazonWebServer(aws_sc1, aws_sc2, "S24_AmazonOrderProcessing_OrdersFile.csv"));
         es.execute(new ShippingCenter(aws_sc1, sc1_s1, sc1_s2, 1));
         es.execute(new ShippingCenter(aws_sc2, sc2_s1, sc2_s2, 2));
         es.execute(new Section(sc1_s1, s1_sd1, 1));
