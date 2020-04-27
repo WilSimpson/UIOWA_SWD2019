@@ -35,10 +35,12 @@ public class ShippingCenter implements Runnable
             {
                 ob_S2.putBlocking(currentOrder);
             }
+
         }
 
         ob_S1.setUpstreamFinished();
         ob_S2.setUpstreamFinished();
+        notifyAll();
         System.out.println("SC: Finished processing all orders");
     }
 }

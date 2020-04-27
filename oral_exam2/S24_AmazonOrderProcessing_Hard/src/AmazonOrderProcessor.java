@@ -7,16 +7,16 @@ public class AmazonOrderProcessor
 
     public static void main(String[] args)
     {
-        OrderBuffer aws_sc1 = new OrderBuffer(20);
-        OrderBuffer aws_sc2 = new OrderBuffer(20);
-        OrderBuffer sc1_s1 = new OrderBuffer(20);
-        OrderBuffer sc1_s2 = new OrderBuffer(20);
-        OrderBuffer sc2_s1 = new OrderBuffer(20);
-        OrderBuffer sc2_s2 = new OrderBuffer(20);
-        OrderBuffer s1_sd1 = new OrderBuffer(20);
-        OrderBuffer s2_sd1 = new OrderBuffer(20);
-        OrderBuffer s1_sd2 = new OrderBuffer(20);
-        OrderBuffer s2_sd2 = new OrderBuffer(20);
+        OrderBuffer aws_sc1 = new OrderBuffer(25);
+        OrderBuffer aws_sc2 = new OrderBuffer(25);
+        OrderBuffer sc1_s1 = new OrderBuffer(25);
+        OrderBuffer sc1_s2 = new OrderBuffer(25);
+        OrderBuffer sc2_s1 = new OrderBuffer(25);
+        OrderBuffer sc2_s2 = new OrderBuffer(25);
+        OrderBuffer s1_sd1 = new OrderBuffer(25);
+        OrderBuffer s2_sd1 = new OrderBuffer(25);
+        OrderBuffer s1_sd2 = new OrderBuffer(25);
+        OrderBuffer s2_sd2 = new OrderBuffer(25);
         OrderBuffer sd1_dt1 = new OrderBuffer(4);
         OrderBuffer sd1_dt2 = new OrderBuffer(4);
         OrderBuffer sd2_dt1 = new OrderBuffer(4);
@@ -39,21 +39,5 @@ public class AmazonOrderProcessor
         es.execute(new DeliveryTruck(sd1_dt2, 1));
         es.execute(new DeliveryTruck(sd2_dt2, 2));
         es.shutdown();
-
-        try
-        {
-            Thread.sleep(1000);
-
-
-        while(Order.getTotalOrdersCreated() < Order.getTotalOrdersDelivered())
-        {
-            Thread.sleep(100);
-        }
-
-        }
-        catch(InterruptedException e)
-        {
-            e.printStackTrace();
-        }
     }
 }

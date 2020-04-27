@@ -1,3 +1,5 @@
+import java.util.concurrent.ArrayBlockingQueue;
+
 public class ShippingDock implements Runnable
 {
     private OrderBuffer ib_S;
@@ -16,6 +18,7 @@ public class ShippingDock implements Runnable
     {
         while(ib_S.shouldContinueAcceptingInput())
         {
+
             Order currentOrder = ib_S.getBlocking();
 
             while(currentOrder != null)
@@ -33,6 +36,7 @@ public class ShippingDock implements Runnable
         }
         ob_DT1.setUpstreamFinished();
         ob_DT2.setUpstreamFinished();
+        notifyAll();
         System.out.println("Shipping Dock: Finished distributing all orders");
     }
 }

@@ -2,7 +2,6 @@ import java.util.concurrent.ArrayBlockingQueue;
 
 public class OrderBuffer
 {
-    private Order order;
     private ArrayBlockingQueue<Order> queue;
 
     private boolean upstreamFinished = false;
@@ -37,9 +36,10 @@ public class OrderBuffer
 
     public synchronized Order getBlocking()
     {
+        Order order = null;
         try
         {
-            while(queue.size() == 0)
+            while(queue.size() == 0 || !upstreamFinished)
             {
                 wait();
             }
@@ -58,6 +58,7 @@ public class OrderBuffer
     public synchronized void setUpstreamFinished()
     {
         upstreamFinished = true;
+        notifyAll();
     }
 
     public synchronized boolean isUpstreamFinished()
@@ -68,6 +69,11 @@ public class OrderBuffer
     public synchronized boolean isBufferEmpty()
     {
         return queue.size() == 0;
+    }
+
+    public synchronized int getBufferSize()
+    {
+        return queue.size();
     }
 
     public synchronized boolean isBufferFull()

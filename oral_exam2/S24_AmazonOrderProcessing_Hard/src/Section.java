@@ -27,9 +27,8 @@ public class Section implements Runnable
             {
                 Order currentOrder = ib_SC.getBlocking();
                 currentOrder.setSection(this);
-                //Thread.sleep(random.nextInt(5000));
+                Thread.sleep(random.nextInt(5000));
                 //Thread.sleep(random.nextInt(1));
-                TimeUnit.MILLISECONDS.sleep(ThreadLocalRandom.current().nextInt(0, 1));
                 ob_SD.putBlocking(currentOrder);
             }
             catch(InterruptedException e)
@@ -39,6 +38,7 @@ public class Section implements Runnable
         }
 
         ob_SD.setUpstreamFinished();
+        notifyAll();
         System.out.println("Section: Finished processing all orders");
     }
 

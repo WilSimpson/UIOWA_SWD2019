@@ -54,6 +54,7 @@ public class AmazonWebServer implements Runnable
         }
         ob_SC1.setUpstreamFinished();
         ob_SC2.setUpstreamFinished();
+
         notifyAll();
         System.out.println("AWS: Finished processing all orders");
     }
