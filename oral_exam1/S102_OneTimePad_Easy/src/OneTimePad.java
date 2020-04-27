@@ -50,9 +50,9 @@ public class OneTimePad
     private boolean askRunAgain()
     {
         String[] validYs = {"y", "YES"};
-        String[] validNs = {"N", "NO", "EXIT"};
+        String[] validNs = {"N", "NO", "EXIT", "QUIT"};
 
-        return containsString(askValidString("Run again? [(Y) / N]", validYs, validNs), validYs);
+        return containsString(askValidString("Run again? [(Y) / N]", validYs, validNs), validYs, false);
     }
 
     /**
@@ -69,43 +69,51 @@ public class OneTimePad
 
 
         //Converts all valid strings to uppercase
+        //No longer needed
+        /*
         validStrings = Arrays.stream(validStrings)
-                .map(s ->
-                        Arrays.stream(s)
+                .map(a ->
+                        Arrays.stream(a)
                                 .map(String::toUpperCase)
                                 .toArray(String[]::new))
                 .toArray(String[][]::new);
+         */
 
-        synchronized(this)
+
+        input = SCANNER.nextLine().toUpperCase();
+
+        //Check if input needs to be validated
+        if(validStrings.length > 0)
         {
-            input = SCANNER.nextLine().toUpperCase();
+            boolean foundValidInput =
+                    Arrays.stream(validStrings).anyMatch(s -> containsString(input, s, false));
 
-            //Check if input needs to be validated
-            if(validStrings.length > 0)
+            //Check if the input is one of the given valid strings
+            if(foundValidInput)
             {
-                //Check if the input is one of the given valid strings
-                if(Arrays.stream(validStrings).anyMatch(s -> containsString(input, s)))
-                {
-                    return input;
-                }
-
-                askValidString(message, validStrings);
+                return input;
             }
+
+            askValidString(message, validStrings);
         }
 
         return input;
     }
 
     /**
-     * Checks if a message contains any string in a given array
+     * Checks if a message contains any string in a given array.
      *
      * @param message message to check
      * @param strings string to check for
+     * @param caseSensitive should check for case sensitive
      * @return whether the message contains any of the strings
      */
-    private boolean containsString(String message, String[] strings)
+    private boolean containsString(String message, String[] strings, boolean caseSensitive)
     {
-        return Arrays.stream(strings).anyMatch(s -> s.contains(message.toUpperCase()));
+        if(caseSensitive)
+            return Arrays.stream(strings).anyMatch(s -> s.contains(message));
+
+        return Arrays.stream(strings).anyMatch(s -> s.toUpperCase().contains(message.toUpperCase()));
     }
 
     /**

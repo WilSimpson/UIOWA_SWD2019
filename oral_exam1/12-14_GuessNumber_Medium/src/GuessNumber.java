@@ -17,7 +17,7 @@ public class GuessNumber extends JPanel
     /**
      * Default value for the guess text field
      */
-    private static final String GUESS_FIELD_DEFAULT_TEXT = "Enter your guess here";
+    private static final String GUESS_FIELD_DEFAULT_TEXT = "Please enter your first guess.";
 
     /**
      * Default value for the guess label field
@@ -94,10 +94,10 @@ public class GuessNumber extends JPanel
         defaultBackgroundColor = getBackground();
 
         //Generates a random number for the game
-        number = getRandomNumber(MIN_VALUE, 1000);
+        number = getRandomNumber(MIN_VALUE, MAX_VALUE);
 
         //Logs the number to the console
-        System.out.println(number);
+        //System.out.println(number);
 
         //Setup the top label that describes the game
         topLabel = new JLabel("I have a number between "+MIN_VALUE+" and "+MAX_VALUE+". Can you guess my number? ", JLabel.CENTER);
@@ -120,7 +120,7 @@ public class GuessNumber extends JPanel
         //Setup the listeners
         guessField.addActionListener(e -> processGuess());
         guessButton.addActionListener(e -> processGuess());
-        newGameButton.addActionListener(e -> newGame());
+        newGameButton.addActionListener(e -> newGame(true));
 
         //Adds all components to the frame
         add(topLabel);
@@ -164,13 +164,13 @@ public class GuessNumber extends JPanel
                 //previous guess set the color to blue otherwise set to red
                 setGuessLabel(isGuessHigh(guess) ? "Too High!" : "Too Low");
 
-                if (result == GuessResult.CLOSER)
-                {
-                    setBackground(Color.BLUE);
-                }
-                else if(result == GuessResult.FURTHER)
+                if(result == GuessResult.FURTHER)
                 {
                     setBackground(Color.RED);
+                }
+                else
+                {
+                    setBackground(Color.BLUE);
                 }
             }
         }
@@ -184,8 +184,10 @@ public class GuessNumber extends JPanel
     /**
      * Generates a new number, sets the previous guess to null, resets the text and label fields, sets the background to
      * the default color and logs the new number to guess to the console.
+     *
+     * @param toggleView whether the view should toggle
      */
-    public void newGame()
+    public void newGame(boolean toggleView)
     {
         //Generates a new number and sets the previous guess to null
         number = getRandomNumber(MIN_VALUE, MAX_VALUE);
@@ -200,7 +202,7 @@ public class GuessNumber extends JPanel
         System.out.println(number);
 
         //Toggle the panel view so the user can enter new guesses
-        toggleView();
+        if(toggleView) toggleView();
     }
 
     /**
@@ -288,5 +290,15 @@ public class GuessNumber extends JPanel
     public boolean isGameOver()
     {
         return newGameButton.isVisible();
+    }
+
+    /**
+     * Gets the number the user is currently guessing for
+     *
+     * @return number user is guessing for
+     */
+    public int getNumber()
+    {
+        return number;
     }
 }

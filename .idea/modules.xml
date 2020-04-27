@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/oral_exam2/10-13_Shapes_Easy/10-13_Shapes_Easy.iml" filepath="$PROJECT_DIR$/oral_exam2/10-13_Shapes_Easy/10-13_Shapes_Easy.iml" />
       <module fileurl="file://$PROJECT_DIR$/oral_exam1/12-14_GuessNumber_Medium/12-14_GuessNumber_Medium.iml" filepath="$PROJECT_DIR$/oral_exam1/12-14_GuessNumber_Medium/12-14_GuessNumber_Medium.iml" />
+      <module fileurl="file://$PROJECT_DIR$/quizzes/20200217-Quiz/20200217-Quiz.iml" filepath="$PROJECT_DIR$/quizzes/20200217-Quiz/20200217-Quiz.iml" />
       <module fileurl="file://$PROJECT_DIR$/oral_exam1/22-7_RandomCircle_Easy/22-7_RandomCircle_Easy.iml" filepath="$PROJECT_DIR$/oral_exam1/22-7_RandomCircle_Easy/22-7_RandomCircle_Easy.iml" />
       <module fileurl="file://$PROJECT_DIR$/textbook_examples/MVCCalculatorExamples/EXAMPLE_MVCCalculator1/EXAMPLE_MVCCalculator1.iml" filepath="$PROJECT_DIR$/textbook_examples/MVCCalculatorExamples/EXAMPLE_MVCCalculator1/EXAMPLE_MVCCalculator1.iml" />
       <module fileurl="file://$PROJECT_DIR$/textbook_examples/MVCCalculatorExamples/EXAMPLE_MVCCalculator2/EXAMPLE_MVCCalculator2.iml" filepath="$PROJECT_DIR$/textbook_examples/MVCCalculatorExamples/EXAMPLE_MVCCalculator2/EXAMPLE_MVCCalculator2.iml" />
@@ -151,6 +152,7 @@
       <module fileurl="file://$PROJECT_DIR$/textbook_examples/ch11/fig11_02/fig11_02.iml" filepath="$PROJECT_DIR$/textbook_examples/ch11/fig11_02/fig11_02.iml" />
       <module fileurl="file://$PROJECT_DIR$/textbook_examples/ch11/fig11_03/fig11_03.iml" filepath="$PROJECT_DIR$/textbook_examples/ch11/fig11_03/fig11_03.iml" />
       <module fileurl="file://$PROJECT_DIR$/textbook_examples/ch11/fig11_05/fig11_05.iml" filepath="$PROJECT_DIR$/textbook_examples/ch11/fig11_05/fig11_05.iml" />
+      <module fileurl="file://$PROJECT_DIR$/quizzes/fig11_05-quiz-03-10-20/fig11_05-quiz-03-10-20.iml" filepath="$PROJECT_DIR$/quizzes/fig11_05-quiz-03-10-20/fig11_05-quiz-03-10-20.iml" />
       <module fileurl="file://$PROJECT_DIR$/textbook_examples/ch11/fig11_06/fig11_06.iml" filepath="$PROJECT_DIR$/textbook_examples/ch11/fig11_06/fig11_06.iml" />
       <module fileurl="file://$PROJECT_DIR$/textbook_examples/ch11/fig11_07/fig11_07.iml" filepath="$PROJECT_DIR$/textbook_examples/ch11/fig11_07/fig11_07.iml" />
       <module fileurl="file://$PROJECT_DIR$/textbook_examples/ch11/fig11_08/fig11_08.iml" filepath="$PROJECT_DIR$/textbook_examples/ch11/fig11_08/fig11_08.iml" />
@@ -159,6 +161,7 @@
       <module fileurl="file://$PROJECT_DIR$/textbook_examples/ch12/fig12_09_10/fig12_09_10.iml" filepath="$PROJECT_DIR$/textbook_examples/ch12/fig12_09_10/fig12_09_10.iml" />
       <module fileurl="file://$PROJECT_DIR$/textbook_examples/ch12/fig12_15_16/fig12_15_16.iml" filepath="$PROJECT_DIR$/textbook_examples/ch12/fig12_15_16/fig12_15_16.iml" />
       <module fileurl="file://$PROJECT_DIR$/textbook_examples/ch12/fig12_17_18/fig12_17_18.iml" filepath="$PROJECT_DIR$/textbook_examples/ch12/fig12_17_18/fig12_17_18.iml" />
+      <module fileurl="file://$PROJECT_DIR$/quizzes/fig12_17_18-quiz-02-25-20/fig12_17_18-quiz-02-25-20.iml" filepath="$PROJECT_DIR$/quizzes/fig12_17_18-quiz-02-25-20/fig12_17_18-quiz-02-25-20.iml" />
       <module fileurl="file://$PROJECT_DIR$/textbook_examples/ch12/fig12_19_20/fig12_19_20.iml" filepath="$PROJECT_DIR$/textbook_examples/ch12/fig12_19_20/fig12_19_20.iml" />
       <module fileurl="file://$PROJECT_DIR$/textbook_examples/ch12/fig12_21_22/fig12_21_22.iml" filepath="$PROJECT_DIR$/textbook_examples/ch12/fig12_21_22/fig12_21_22.iml" />
       <module fileurl="file://$PROJECT_DIR$/textbook_examples/ch17/fig12_21_22_lambda/fig12_21_22_lambda.iml" filepath="$PROJECT_DIR$/textbook_examples/ch17/fig12_21_22_lambda/fig12_21_22_lambda.iml" />

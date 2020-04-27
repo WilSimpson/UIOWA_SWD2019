@@ -1,6 +1,9 @@
 import javax.swing.*;
-import javax.swing.text.StyledDocument;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
 
 /**
  * This class constructs a new JFrame and paints a randomly sized circle with
@@ -10,38 +13,46 @@ import java.awt.*;
  *
  * @author Wil Simpson
  */
-public class RandomCircle
+public class RandomCircle extends JFrame
 {
-    /**
-     * Circle that we will use
-     */
-    private MyCircle circle;
-
     /**
      * Panel that will draw our circle
      */
-    private CirclePanel panel;
+    private final CirclePanel panel = new CirclePanel(new MyCircle());
 
     /**
      * Text area to print information about the circle
      */
-    private JTextArea textArea;
+    private final JTextArea textArea = new JTextArea(4, 1);
 
     /**
-     * Initializes all the elements for the GUI. Creates a new random circle. Calculates the values and puts them in the
-     * textarea. Puts everything in the frame and and makes it visible.
+     * Creates a new panel and sets up the frame
      */
-    public void run()
+    public RandomCircle()
     {
-        //The frame the application will be using
-        JFrame frame = new JFrame("Random Circle");
+        super("Random Circle");
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //Setup frame
+        getContentPane().setBackground(Color.WHITE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        //Create our circle then create the circle and textarea panels
-        circle = new MyCircle();
-        panel = new CirclePanel(circle);
-        textArea = new JTextArea(1, 1);
+        //Setup the menubar
+        JMenuBar menuBar = new JMenuBar();
+        JMenu fileMenu = new JMenu("File");
+        JMenuItem newCircleMenuItem = new JMenuItem("New Circle");
+        JMenuItem exitMenuItem = new JMenuItem("Exit");
+
+        newCircleMenuItem.addActionListener(e-> newCircle());
+        exitMenuItem.addActionListener(e->dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING)));
+
+        newCircleMenuItem.setMnemonic(KeyEvent.VK_N);
+        newCircleMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
+
+        //Combine menu components and add to the frame
+        fileMenu.add(newCircleMenuItem);
+        fileMenu.add(exitMenuItem);
+        menuBar.add(fileMenu);
+        setJMenuBar(menuBar);
 
         //Setup the textarea and make it look good
         textArea.setLineWrap(false);
@@ -49,25 +60,52 @@ public class RandomCircle
         textArea.setBackground(Color.WHITE);
         textArea.setMargin(new Insets(10, 10, 0, 10));
 
-        setupTextArea();
-
         //Add all components to the frame
-        frame.add(panel, BorderLayout.NORTH);
-        frame.add(textArea, BorderLayout.SOUTH);
+        add(panel, BorderLayout.NORTH);
+        add(textArea, BorderLayout.SOUTH);
+    }
 
-        //Pack the frame to fit everything perfectly and make it visible
-        frame.pack();
-        frame.setVisible(true);
+    /**
+     * Generates the text, packs and shows the frame. Frame will not show until this method is called.
+     */
+    public void run()
+    {
+        //Generate text, pack and show the frame
+        generateTextArea();
+        pack();
+        setMinimumSize(getSize());
+        setVisible(true);
+    }
+
+    /**
+     * Generates a new circle and shows it's properties to the user
+     */
+    private void newCircle()
+    {
+        setMinimumSize(null);
+
+        //Generate a new circle
+        panel.generateNewCircle();
+
+        //Calculate the circle properties and setup the text area with their values
+        generateTextArea();
+
+        //Repack the frame to fit everything perfectly
+        pack();
+
+        setMinimumSize(getSize());
     }
 
     /**
      * Setups the textarea to contain all of the information about the circle
      */
-    private void setupTextArea()
+    private void generateTextArea()
     {
         //Clear the textArea
         textArea.selectAll();
         textArea.replaceSelection("");
+
+        MyCircle circle = panel.getCircle();
 
         //Add all of the required information to the textarea
         textArea.append(String.format("AREA: %.2f %n", circle.getArea()));
