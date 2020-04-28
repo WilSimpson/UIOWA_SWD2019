@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/oral_exam2/10-13_Shapes_Easy/10-13_Shapes_Easy.iml" filepath="$PROJECT_DIR$/oral_exam2/10-13_Shapes_Easy/10-13_Shapes_Easy.iml" />
       <module fileurl="file://$PROJECT_DIR$/oral_exam1/12-14_GuessNumber_Medium/12-14_GuessNumber_Medium.iml" filepath="$PROJECT_DIR$/oral_exam1/12-14_GuessNumber_Medium/12-14_GuessNumber_Medium.iml" />
+      <module fileurl="file://$PROJECT_DIR$/oral_exam2/18-20_MazeTraversal_Hard/18-20_MazeTraversal_Hard.iml" filepath="$PROJECT_DIR$/oral_exam2/18-20_MazeTraversal_Hard/18-20_MazeTraversal_Hard.iml" />
       <module fileurl="file://$PROJECT_DIR$/quizzes/20200217-Quiz/20200217-Quiz.iml" filepath="$PROJECT_DIR$/quizzes/20200217-Quiz/20200217-Quiz.iml" />
       <module fileurl="file://$PROJECT_DIR$/oral_exam1/22-7_RandomCircle_Easy/22-7_RandomCircle_Easy.iml" filepath="$PROJECT_DIR$/oral_exam1/22-7_RandomCircle_Easy/22-7_RandomCircle_Easy.iml" />
       <module fileurl="file://$PROJECT_DIR$/textbook_examples/MVCCalculatorExamples/EXAMPLE_MVCCalculator1/EXAMPLE_MVCCalculator1.iml" filepath="$PROJECT_DIR$/textbook_examples/MVCCalculatorExamples/EXAMPLE_MVCCalculator1/EXAMPLE_MVCCalculator1.iml" />
@@ -64,6 +65,9 @@
       <module fileurl="file://$PROJECT_DIR$/oral_exam1/S23_RequestInheritance_Easy/S23_RequestInheritance_Easy.iml" filepath="$PROJECT_DIR$/oral_exam1/S23_RequestInheritance_Easy/S23_RequestInheritance_Easy.iml" />
       <module fileurl="file://$PROJECT_DIR$/oral_exam2/S24_AmazonOrderProcessing_Hard/S24_AmazonOrderProcessing_Hard.iml" filepath="$PROJECT_DIR$/oral_exam2/S24_AmazonOrderProcessing_Hard/S24_AmazonOrderProcessing_Hard.iml" />
       <module fileurl="file://$PROJECT_DIR$/oral_exam2/S25_SixCardGolf_Hard/S25_SixCardGolf_Hard.iml" filepath="$PROJECT_DIR$/oral_exam2/S25_SixCardGolf_Hard/S25_SixCardGolf_Hard.iml" />
+      <module fileurl="file://$PROJECT_DIR$/oral_exam2/S35_GraphAlgos_Easy/S35_GraphAlgos_Easy.iml" filepath="$PROJECT_DIR$/oral_exam2/S35_GraphAlgos_Easy/S35_GraphAlgos_Easy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/oral_exam2/S35_GraphAlgos_Hard/S35_GraphAlgos_Hard.iml" filepath="$PROJECT_DIR$/oral_exam2/S35_GraphAlgos_Hard/S35_GraphAlgos_Hard.iml" />
+      <module fileurl="file://$PROJECT_DIR$/oral_exam2/S35_GraphAlgos_Medium/S35_GraphAlgos_Medium.iml" filepath="$PROJECT_DIR$/oral_exam2/S35_GraphAlgos_Medium/S35_GraphAlgos_Medium.iml" />
       <module fileurl="file://$PROJECT_DIR$/extra_credit/S4_ChangeComputation_Easy/S4_ChangeComputation_Easy.iml" filepath="$PROJECT_DIR$/extra_credit/S4_ChangeComputation_Easy/S4_ChangeComputation_Easy.iml" />
       <module fileurl="file://$PROJECT_DIR$/oral_exam1/S4_ChangeComputation_Medium/S4_ChangeComputation_Medium.iml" filepath="$PROJECT_DIR$/oral_exam1/S4_ChangeComputation_Medium/S4_ChangeComputation_Medium.iml" />
       <module fileurl="file://$PROJECT_DIR$/oral_exam2/S5_Scoreboard_Hard/S5_Scoreboard_Hard.iml" filepath="$PROJECT_DIR$/oral_exam2/S5_Scoreboard_Hard/S5_Scoreboard_Hard.iml" />
