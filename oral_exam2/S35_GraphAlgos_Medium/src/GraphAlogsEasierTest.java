@@ -4,17 +4,17 @@ public class GraphAlogsEasierTest
 {
     public static void main(String[] args)
     {
-        GraphAlgos algos = new GraphAlgos("words.dat");
-        algos.createAdjacencyList();
+        GraphAlgos algos = new GraphAlgos("words-short.dat");
+        //System.out.println(algos.getGraph().getAverageNumEdges());
 
-        System.out.println("DFS Starting");
-        algos.dfsFindLargestAdj();
-        algos.printLargestAdjacencyList();
-        System.out.println("DFS Runtime: "+algos.getAlgoRuntime()+" ms\n\n");
+        System.out.println("Running BFS:");
+        algos.findLargestConnectedSetVertsBFS();
+        System.out.println("\n\nLargest set of verts found:");
+        algos.printLargestConnectedSetVerts();
 
-        System.out.println("BFS Starting");
-        algos.bfsFindLargestAdj();
-        algos.printLargestAdjacencyList();
-        System.out.println("BFS Runtime: "+algos.getAlgoRuntime()+" ms");
+        System.out.println("\n\nRunning DFS:");
+        algos.findLargestConnectedSetVertsDFS();
+        System.out.println("\n\nLargest set of verts found:");
+        algos.printLargestConnectedSetVerts();
     }
 }

@@ -23,13 +23,13 @@ public class MazeTraversal
         char mazePath = '.';
         char movedChar = 'x';
         char deadEndChar = '0';
-        long sleepTime = 1000l;
+        long sleepTime = 000l;
 
         MazeSolver mazeSolver = new MazeSolver(mazeWall, mazePath, movedChar, deadEndChar, startRow, startCol, sleepTime);
         boolean solved = mazeSolver.mazeTraversal(maze, startRow, startCol);
 
         String outcome = solved ? "SOLVED!" : "NOT POSSIBLE TO SOLVE!";
         System.out.println("\n\n\n"+outcome);
-        MazeSolver.printMaze(maze);
+        MazeSolver.printMaze(maze, deadEndChar, mazePath);
     }
 }

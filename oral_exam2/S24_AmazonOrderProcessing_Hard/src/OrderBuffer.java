@@ -22,6 +22,7 @@ public class OrderBuffer
         {
             while(queue.remainingCapacity() == 0)
             {
+                notifyAll();
                 wait();
             }
 
@@ -41,6 +42,7 @@ public class OrderBuffer
         {
             while(queue.size() == 0 || !upstreamFinished)
             {
+                notifyAll();
                 wait();
             }
 

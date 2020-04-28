@@ -102,13 +102,22 @@ public class HangmanController
         {
             hangmanShapes[i].setVisible(false);
         }
+
+        failedGuessesTextfield.setText("");
+
+        randomlyChooseWord();
+        setHangmanWord();
     }
 
     @FXML
     public void onConfirmClicked(ActionEvent event)
     {
         String guess = guessTextField.getText();
-        if(guess == null)
+        if(isHangmanDead())
+        {
+            helpLabel.setText("The game is already over! To start a new game go to File -> New Game");
+        }
+        else if(guess == null)
         {
             helpLabel.setText("Error: Must enter a guess!");
         }
@@ -124,6 +133,11 @@ public class HangmanController
                 {
                     if(word.charAt(i) == guess.charAt(0))
                     {
+                        if(showChar[i] == true)
+                        {
+                            helpLabel.setText("OOPS! You've already made that guess!");
+                            return;
+                        }
                         showChar[i] = true;
                     }
                 }
@@ -139,6 +153,10 @@ public class HangmanController
                     helpLabel.setText("NICE! That was in the word!");
                 }
             }
+            else if(failedGuessesTextfield.getText().contains(guess))
+            {
+                helpLabel.setText("OOPS! You've already made that guess!");
+            }
             else
             {
                 updateHangman();
@@ -151,6 +169,15 @@ public class HangmanController
                 else
                 {
                     helpLabel.setText("OOPS! That wasn't in the word!");
+                }
+
+                if(failedGuessesTextfield.getText().equals(""))
+                {
+                    failedGuessesTextfield.appendText(guess);
+                }
+                else
+                {
+                    failedGuessesTextfield.appendText(" "+guess);
                 }
             }
         }

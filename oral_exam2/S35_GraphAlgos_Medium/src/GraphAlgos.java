@@ -1,203 +1,211 @@
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.lang.reflect.Array;
+import java.util.*;
 
 public class GraphAlgos
 {
-    private ArrayList<String> words;
+    private int currentVertsPerLine = 0;
+    private int maxVertsPerLine = 10;
 
-    private HashMap<String, ArrayList<String>> adjacencyList = new HashMap<>();
-    private HashMap<String, Boolean> searched = new HashMap<>();
-    private ArrayList<String> largestAdjacenyList = new ArrayList<>();
+    private UndirectedGraph<String> graph;
 
-    private long startTime;
-    private long endTime;
+    ArrayList<String> largestConnectedSetVerts = new ArrayList<>();
+    HashMap<String, Boolean> searched = new HashMap<>();
+    LinkedList<String> queue = new LinkedList<>();
 
-    public GraphAlgos(String filePath)
+    public GraphAlgos(String inputFile)
     {
-        words = FileReader.fileToList(filePath);
-    }
+        graph = new UndirectedGraph(inputFile, (Comparator<String>) (s1, s2) -> {
+            int numDifferences = 0;
 
-    public void createAdjacencyList()
-    {
-        for(String keyWord : words)
-        {
-            for(String comparedWord : words)
+            int s1Length = s1.length();
+            int s2Length = s2.length();
+
+            //Edit distance has to be more than one
+            if(Math.abs(s1Length-s2Length) > 1)
+                return -1;
+
+            //At least one difference due to length
+            if(Math.abs(s1Length-s2Length) == 1)
+                numDifferences++;
+
+            //We need to have separate indexes due to the lengths possibly being different by one
+            int s1Index=0;
+            int s2Index=0;
+            while(s1Index<s1Length && s2Index<s2Length)
             {
-                if(!keyWord.equals(comparedWord) && comparedWord != null)
+                if(s1.charAt(s1Index) == s2.charAt(s2Index))
                 {
-                    if(editDistanceIsOne(keyWord, comparedWord))
-                    {
-                        ArrayList<String> adjacentVerts = adjacencyList.get(keyWord);
-                        if(adjacentVerts == null)
-                        {
-                            adjacentVerts = new ArrayList<>();
-                        }
+                    s1Index++;
+                    s2Index++;
+                }
+                else
+                {
+                    numDifferences++;
 
-                        adjacentVerts.add(comparedWord);
-                        adjacencyList.put(keyWord, adjacentVerts);
+                    //We can leave early since we don't need to count
+                    if(numDifferences > 1) return -1;
+
+                    //Not being the same could be due to length issue.
+                    if(s1Length > s2Length)
+                    {
+                        s1Index++;
+                    }
+                    else if(s2Index > s1Index)
+                    {
+                        s2Index++;
+                    }
+                    //Not length issue, just different
+                    else
+                    {
+                        s1Index++;
+                        s2Index++;
                     }
                 }
             }
-        }
+
+            return numDifferences == 1 ? 1 : -1;
+        });
     }
 
-    public long getAlgoRuntime()
+    public UndirectedGraph getGraph()
     {
-        return endTime - startTime;
+        return graph;
     }
 
-    public void clearLargestAdjacencyList()
+    public ArrayList<String> findLargestConnectedSetVertsBFS()
     {
-        largestAdjacenyList.clear();
-    }
-
-    public ArrayList<String> getLargestAdjacenyList()
-    {
-        return largestAdjacenyList;
-    }
-
-    public void bfsFindLargestAdj()
-    {
-        startTime = System.currentTimeMillis();
-
+        largestConnectedSetVerts.clear();
         searched.clear();
-        largestAdjacenyList.clear();
+        queue.clear();
 
-        for(String vert : adjacencyList.keySet())
+        for(String vert : graph.getAdjacencyList().keySet())
         {
-            if(searched.get(vert) == null || !searched.get(vert))
+            if(!searched.containsKey(vert))
             {
-                bfsFindLargestAdjHelper(vert);
+                queue.add(vert);
+                searched.put(vert, true);
+                findLargestConnectedSetVertsBFSRecursive();
             }
         }
 
-        endTime = System.currentTimeMillis();
+        currentVertsPerLine = 0;
+        return largestConnectedSetVerts;
     }
 
-    private void bfsFindLargestAdjHelper(String vert)
+    private void findLargestConnectedSetVertsBFSRecursive()
     {
-        searched.put(vert, true);
-        LinkedList<String> vertBuffer = new LinkedList<>();
-        vertBuffer.add(vert);
+        //We're done processing the queue
+        if(queue.isEmpty()) return;
 
-        while(vertBuffer.size() != 0)
+        String vert = queue.poll();
+        checkForLargestVert(vert);
+
+        for(String adjVert : graph.getAdjacencyList().get(vert))
         {
-            vert = vertBuffer.poll();
-            int currentLargestVert = currentLargestAdjVerts();
-            int currentAdjVerts = getNumAdj(vert);
-
-            if(currentAdjVerts > currentLargestVert)
+            if(!searched.containsKey(adjVert))
             {
-                largestAdjacenyList.clear();
-                largestAdjacenyList.add(vert);
-            }
-            //Same as largest
-            else if(currentAdjVerts == currentLargestVert)
-            {
-                largestAdjacenyList.add(vert);
-            }
-
-            for(String adjVert : adjacencyList.get(vert))
-            {
-                if(searched.get(adjVert) == null || !searched.get(adjVert))
-                {
-                    searched.put(adjVert, true);
-                    vertBuffer.add(adjVert);
-                }
+                searched.put(adjVert, true);
+                queue.add(adjVert);
             }
         }
 
-        vertBuffer.add(vert);
+        findLargestConnectedSetVertsBFSRecursive();
     }
 
-    public void dfsFindLargestAdj()
+    public ArrayList<String> findLargestConnectedSetVertsDFS()
     {
-        startTime = System.currentTimeMillis();
-
+        largestConnectedSetVerts.clear();
         searched.clear();
-        largestAdjacenyList.clear();
 
-        for(String vert : adjacencyList.keySet())
+        for(String vert : graph.getAdjacencyList().keySet())
         {
-            if(searched.get(vert) == null || !searched.get(vert))
-            {
-                dfsFindLargestAdjRecursiveHelper(vert);
-            }
+            if(!searched.containsKey(vert))
+                findLargestConnectedSetVertsDFSRecursive(vert);
         }
 
-        endTime = System.currentTimeMillis();
+        currentVertsPerLine = 0;
+        return largestConnectedSetVerts;
     }
 
-    private void dfsFindLargestAdjRecursiveHelper(String vert)
+    private void findLargestConnectedSetVertsDFSRecursive(String vert)
     {
+        checkForLargestVert(vert);
+
+        for(String adjVert : graph.getAdjacencyList().get(vert))
+        {
+            if(!searched.containsKey(adjVert))
+            {
+                findLargestConnectedSetVertsDFSRecursive(adjVert);
+            }
+        }
+    }
+
+    public void checkForLargestVert(String vert)
+    {
+        System.out.print(vert+getSpacerType());
+
+        //Mark the vert as searched
         searched.put(vert, true);
-        int currentLargestVert = currentLargestAdjVerts();
-        int currentAdjVerts = getNumAdj(vert);
 
-        //Current vert is the largest
-        if(currentAdjVerts > currentLargestVert)
-        {
-            largestAdjacenyList.clear();
-            largestAdjacenyList.add(vert);
-        }
-        //Same as largest
-        else if(currentAdjVerts == currentLargestVert)
-        {
-            largestAdjacenyList.add(vert);
-        }
+        //Check current and current largest set of verts
+        int currentLargestNumVertEdges = 0;
+        if(largestConnectedSetVerts.size() > 0)
+            currentLargestNumVertEdges = graph.getAdjacencyList().get(largestConnectedSetVerts.get(0)).size();
 
-        for(String adj : adjacencyList.get(vert))
+        int currentNumVertEdges = graph.getAdjacencyList().get(vert).size();
+
+        //If larger clear and add current
+        if(currentNumVertEdges > currentLargestNumVertEdges)
         {
-            if(searched.get(adj) == null || !searched.get(adj))
-            {
-                dfsFindLargestAdjRecursiveHelper(adj);
-            }
+            largestConnectedSetVerts.clear();
+            largestConnectedSetVerts.add(vert);
+        }
+        //They're the same, add it to the list
+        else if(currentNumVertEdges == currentLargestNumVertEdges)
+        {
+            largestConnectedSetVerts.add(vert);
         }
     }
 
-    public int getNumAdj(String vert)
+    public ArrayList<String> getLargestConnectedSetVerts()
     {
-        return adjacencyList.get(vert).size();
+        return largestConnectedSetVerts;
     }
 
-    private int currentLargestAdjVerts()
+    public void printLargestConnectedSetVerts()
     {
-        for(String vert : largestAdjacenyList)
+        for(String vert : largestConnectedSetVerts)
         {
-            return adjacencyList.get(vert).size();
+            System.out.println(vert+":");
+            printAdjacentVerts(vert);
+            System.out.println("\n");
+        }
+    }
+
+    public void printAdjacentVerts(String vert)
+    {
+        for(String adjVert : graph.getAdjacencyList().get(vert))
+        {
+            System.out.print(adjVert+getSpacerType());
         }
 
-        return 0;
+        currentVertsPerLine = 0;
     }
 
-    public HashMap<String, ArrayList<String>> getAdjacencyList()
+    private String getSpacerType()
     {
-        return adjacencyList;
-    }
-
-    public boolean editDistanceIsOne(String s1, String s2)
-    {
-        int numDifferences = 0;
-        for(int i=0; i<s1.length(); i++)
+        String spacer;
+        if(currentVertsPerLine < maxVertsPerLine)
         {
-            if(s1.charAt(i) == s2.charAt(i)) numDifferences++;
+            currentVertsPerLine++;
+            spacer = ", ";
+        }
+        else
+        {
+            currentVertsPerLine = 0;
+            spacer = "\n";
         }
 
-        return numDifferences == 1;
-    }
-
-    public void printLargestAdjacencyList()
-    {
-        for(String currentVert : largestAdjacenyList)
-        {
-            System.out.println(currentVert);
-            for(String adjVert : adjacencyList.get(currentVert))
-            {
-                System.out.print(adjVert+", ");
-            }
-            System.out.println("");
-        }
+        return spacer;
     }
 }

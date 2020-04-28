@@ -50,6 +50,8 @@ public class AmazonWebServer implements Runnable
                     default:
                         ob_SC2.putBlocking(currentOrder);
                 }
+
+                notifyAll();
             }
         }
         ob_SC1.setUpstreamFinished();

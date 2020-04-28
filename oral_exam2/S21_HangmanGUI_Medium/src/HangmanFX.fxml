@@ -41,7 +41,7 @@
                   <Line fx:id="hangman10" endX="174.5" endY="75.5" layoutX="-56.0" layoutY="40.0" startX="185.0" startY="94.0" visible="false" />
                </children>
             </Pane>
-            <TextField id="incorrectGuessesTextField" fx:id="failedGuessesTextfield" alignment="CENTER" editable="false" layoutX="14.0" layoutY="331.0" prefHeight="26.0" prefWidth="194.0" style="-fx-background-color: rgb(0,0,0,0);" text="A B C">
+            <TextField id="incorrectGuessesTextField" fx:id="failedGuessesTextfield" alignment="CENTER" editable="false" layoutX="14.0" layoutY="331.0" prefHeight="26.0" prefWidth="194.0" style="-fx-background-color: rgb(0,0,0,0);">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font>

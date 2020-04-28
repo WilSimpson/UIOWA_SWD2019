@@ -12,6 +12,8 @@ public class DeliveryTruck implements Runnable
 
     private int deliveriesCompleted = 0;
 
+    private ArrayBlockingQueue<Order> deliveryQueue = new ArrayBlockingQueue<>(10);
+
     ArrayBlockingQueue<Order> deliveries = new ArrayBlockingQueue<>(4);
 
     public DeliveryTruck(OrderBuffer ib_SD, int truckNumber)
@@ -31,20 +33,33 @@ public class DeliveryTruck implements Runnable
 
         while(ib_SD.shouldContinueAcceptingInput())
         {
-            try
+            Order currentOrder = ib_SD.getBlocking();
+            currentOrder.setDeliveryTruck(this);
+            deliveryQueue.add(currentOrder);
+
+            if(deliveryQueue.size() == 4 || ib_SD.isBufferEmpty())
             {
-                Order currentOrder = ib_SD.getBlocking();
-                currentOrder.setDeliveryTruck(this);
-                Thread.sleep(random.nextInt(10*1000));
-                //Thread.sleep(random.nextInt(1));
-                //TimeUnit.MILLISECONDS.sleep(ThreadLocalRandom.current().nextInt(0, 1000));
-                currentOrder.setDelivered();
-                System.out.println(currentOrder);
-                deliveriesCompleted++;
-            }
-            catch(InterruptedException e)
-            {
-                e.printStackTrace();
+                while(deliveryQueue.peek() != null)
+                {
+                    try
+                    {
+                        currentOrder = deliveryQueue.take();
+
+                        //Thread.sleep(random.nextInt(10*1000));
+                        Thread.sleep(random.nextInt(1));
+                        //TimeUnit.MILLISECONDS.sleep(ThreadLocalRandom.current().nextInt(0, 1000));
+
+                        currentOrder.setDelivered();
+                        System.out.println(currentOrder);
+                        deliveriesCompleted++;
+                    }
+                    catch(InterruptedException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+
+                System.out.println("Truck "+truckNumber+": Finished deliveries.");
             }
         }
 

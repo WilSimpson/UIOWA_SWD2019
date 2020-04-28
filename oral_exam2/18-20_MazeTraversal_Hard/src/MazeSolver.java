@@ -1,3 +1,6 @@
+import java.nio.CharBuffer;
+import java.util.Arrays;
+
 public class MazeSolver
 {
     private char mazeWall;
@@ -51,14 +54,12 @@ public class MazeSolver
                       )
         {
             solved = true;
+            maze[row][col] = movedChar;
             return true;
         }
 
         //Try to move to a new location
         tryMoveTo(maze, row, col, mazePath, movedChar);
-
-        //No options we could move to so we stop
-        maze[row][col] = movedChar;
 
         //Now we need to move backwards since no new moves are possible at the current location
         //Change marks from movedChar to deadEndChar
@@ -120,6 +121,19 @@ public class MazeSolver
             for(int j=0; j<maze[i].length; j++)
             {
                 System.out.print(String.format(" %c ", maze[i][j]));
+            }
+            System.out.println();
+        }
+        System.out.println("\n-------------------------------\n");
+    }
+    public static void printMaze(char[][] maze, char deadEndChar, char mazePath)
+    {
+        System.out.println("--------- PRINTED MAZE --------\n");
+        for(int i=0; i<maze.length; i++)
+        {
+            for(int j=0; j<maze[i].length; j++)
+            {
+                System.out.print(String.format(" %c ", deadEndChar == maze[i][j] ? mazePath : maze[i][j]));
             }
             System.out.println();
         }

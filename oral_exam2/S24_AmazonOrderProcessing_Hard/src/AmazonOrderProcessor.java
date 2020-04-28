@@ -7,20 +7,20 @@ public class AmazonOrderProcessor
 
     public static void main(String[] args)
     {
-        OrderBuffer aws_sc1 = new OrderBuffer(25);
-        OrderBuffer aws_sc2 = new OrderBuffer(25);
-        OrderBuffer sc1_s1 = new OrderBuffer(25);
-        OrderBuffer sc1_s2 = new OrderBuffer(25);
-        OrderBuffer sc2_s1 = new OrderBuffer(25);
-        OrderBuffer sc2_s2 = new OrderBuffer(25);
-        OrderBuffer s1_sd1 = new OrderBuffer(25);
-        OrderBuffer s2_sd1 = new OrderBuffer(25);
-        OrderBuffer s1_sd2 = new OrderBuffer(25);
-        OrderBuffer s2_sd2 = new OrderBuffer(25);
-        OrderBuffer sd1_dt1 = new OrderBuffer(4);
-        OrderBuffer sd1_dt2 = new OrderBuffer(4);
-        OrderBuffer sd2_dt1 = new OrderBuffer(4);
-        OrderBuffer sd2_dt2 = new OrderBuffer(4);
+        OrderBuffer aws_sc1 = createBuffer();
+        OrderBuffer aws_sc2 = createBuffer();
+        OrderBuffer sc1_s1  = createBuffer();
+        OrderBuffer sc1_s2  = createBuffer();
+        OrderBuffer sc2_s1  = createBuffer();
+        OrderBuffer sc2_s2  = createBuffer();
+        OrderBuffer s1_sd1  = createBuffer();
+        OrderBuffer s2_sd1  = createBuffer();
+        OrderBuffer s1_sd2  = createBuffer();
+        OrderBuffer s2_sd2  = createBuffer();
+        OrderBuffer sd1_dt1 = createBuffer();
+        OrderBuffer sd1_dt2 = createBuffer();
+        OrderBuffer sd2_dt1 = createBuffer();
+        OrderBuffer sd2_dt2 = createBuffer();
 
         ExecutorService es = Executors.newCachedThreadPool();
         es.execute(new AmazonWebServer(aws_sc1, aws_sc2, "S24_AmazonOrderProcessing_OrdersFile.csv"));
@@ -39,5 +39,10 @@ public class AmazonOrderProcessor
         es.execute(new DeliveryTruck(sd1_dt2, 1));
         es.execute(new DeliveryTruck(sd2_dt2, 2));
         es.shutdown();
+    }
+
+    public static OrderBuffer createBuffer()
+    {
+        return new OrderBuffer(25);
     }
 }
