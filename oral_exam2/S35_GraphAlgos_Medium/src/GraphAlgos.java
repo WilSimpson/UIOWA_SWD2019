@@ -8,9 +8,7 @@ public class GraphAlgos
 
     private UndirectedGraph<String> graph;
 
-    ArrayList<String> largestConnectedSetVerts = new ArrayList<>();
-    HashMap<String, Boolean> searched = new HashMap<>();
-    LinkedList<String> queue = new LinkedList<>();
+
 
     public GraphAlgos(String inputFile)
     {
@@ -74,17 +72,17 @@ public class GraphAlgos
 
     public ArrayList<String> findLargestConnectedSetVertsBFS()
     {
-        largestConnectedSetVerts.clear();
-        searched.clear();
-        queue.clear();
+        ArrayList<String> largestConnectedSetVerts = new ArrayList<>();
+        HashMap<String, Boolean> searched = new HashMap<>();
+        LinkedList<String> queue = new LinkedList<>();
 
-        for(String vert : graph.getAdjacencyList().keySet())
+        for(String vert : graph.getVerts())
         {
             if(!searched.containsKey(vert))
             {
                 queue.add(vert);
                 searched.put(vert, true);
-                findLargestConnectedSetVertsBFSRecursive();
+                findLargestConnectedSetVertsBFSRecursive(queue, searched, largestConnectedSetVerts);
             }
         }
 
@@ -92,13 +90,13 @@ public class GraphAlgos
         return largestConnectedSetVerts;
     }
 
-    private void findLargestConnectedSetVertsBFSRecursive()
+    private void findLargestConnectedSetVertsBFSRecursive(LinkedList<String> queue, HashMap<String, Boolean> searched, ArrayList<String> largestConnectedSetVerts)
     {
         //We're done processing the queue
         if(queue.isEmpty()) return;
 
         String vert = queue.poll();
-        checkForLargestVert(vert);
+        checkForLargestVert(vert, searched, largestConnectedSetVerts);
 
         for(String adjVert : graph.getAdjacencyList().get(vert))
         {
@@ -109,38 +107,38 @@ public class GraphAlgos
             }
         }
 
-        findLargestConnectedSetVertsBFSRecursive();
+        findLargestConnectedSetVertsBFSRecursive(queue, searched, largestConnectedSetVerts);
     }
 
     public ArrayList<String> findLargestConnectedSetVertsDFS()
     {
-        largestConnectedSetVerts.clear();
-        searched.clear();
+        ArrayList<String> largestConnectedSetVerts = new ArrayList<>();
+        HashMap<String, Boolean> searched = new HashMap<>();
 
-        for(String vert : graph.getAdjacencyList().keySet())
+        for(String vert : graph.getVerts())
         {
             if(!searched.containsKey(vert))
-                findLargestConnectedSetVertsDFSRecursive(vert);
+                findLargestConnectedSetVertsDFSRecursive(vert, searched, largestConnectedSetVerts);
         }
 
         currentVertsPerLine = 0;
         return largestConnectedSetVerts;
     }
 
-    private void findLargestConnectedSetVertsDFSRecursive(String vert)
+    private void findLargestConnectedSetVertsDFSRecursive(String vert, HashMap<String, Boolean> searched, ArrayList<String> largestConnectedSetVerts)
     {
-        checkForLargestVert(vert);
+        checkForLargestVert(vert, searched, largestConnectedSetVerts);
 
         for(String adjVert : graph.getAdjacencyList().get(vert))
         {
             if(!searched.containsKey(adjVert))
             {
-                findLargestConnectedSetVertsDFSRecursive(adjVert);
+                findLargestConnectedSetVertsDFSRecursive(adjVert, searched, largestConnectedSetVerts);
             }
         }
     }
 
-    public void checkForLargestVert(String vert)
+    public void checkForLargestVert(String vert, HashMap<String, Boolean> searched, ArrayList<String> largestConnectedSetVerts)
     {
         System.out.print(vert+getSpacerType());
 
@@ -167,14 +165,10 @@ public class GraphAlgos
         }
     }
 
-    public ArrayList<String> getLargestConnectedSetVerts()
-    {
-        return largestConnectedSetVerts;
-    }
 
-    public void printLargestConnectedSetVerts()
+    public void printLargestConnectedSetVerts(ArrayList<String> list)
     {
-        for(String vert : largestConnectedSetVerts)
+        for(String vert : list)
         {
             System.out.println(vert+":");
             printAdjacentVerts(vert);

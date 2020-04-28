@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GraphAlogsEasierTest
@@ -7,14 +8,16 @@ public class GraphAlogsEasierTest
         GraphAlgos algos = new GraphAlgos("words-short.dat");
         //System.out.println(algos.getGraph().getAverageNumEdges());
 
+        ArrayList<String> list;
+
         System.out.println("Running BFS:");
-        algos.findLargestConnectedSetVertsBFS();
+        list = algos.findLargestConnectedSetVertsBFS();
         System.out.println("\n\nLargest set of verts found:");
-        algos.printLargestConnectedSetVerts();
+        algos.printLargestConnectedSetVerts(list);
 
         System.out.println("\n\nRunning DFS:");
-        algos.findLargestConnectedSetVertsDFS();
+        list = algos.findLargestConnectedSetVertsDFS();
         System.out.println("\n\nLargest set of verts found:");
-        algos.printLargestConnectedSetVerts();
+        algos.printLargestConnectedSetVerts(list);
     }
 }
