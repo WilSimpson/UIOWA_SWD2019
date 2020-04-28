@@ -5,7 +5,9 @@ public class GraphAlogsEasierTest
 {
     public static void main(String[] args)
     {
-        GraphAlgos algos = new GraphAlgos("words-short.dat");
+        GraphAlgos algos = new GraphAlgos("words.dat");
+        //GraphAlgos algos = new GraphAlgos("words-short.dat");
+        //GraphAlgos algos = new GraphAlgos("wordlist.dumb");
         //System.out.println(algos.getGraph().getAverageNumEdges());
 
         ArrayList<String> list;

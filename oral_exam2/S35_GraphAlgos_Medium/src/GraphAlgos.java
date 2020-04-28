@@ -76,38 +76,30 @@ public class GraphAlgos
         HashMap<String, Boolean> searched = new HashMap<>();
         LinkedList<String> queue = new LinkedList<>();
 
-        for(String vert : graph.getVerts())
+        for(String startingVert : graph.getVerts())
         {
-            if(!searched.containsKey(vert))
+            if(!searched.containsKey(startingVert))
             {
-                queue.add(vert);
-                searched.put(vert, true);
-                findLargestConnectedSetVertsBFSRecursive(queue, searched, largestConnectedSetVerts);
+                queue.add(startingVert);
+            }
+
+            while(!queue.isEmpty())
+            {
+                String vert = queue.poll();
+                checkForLargestVert(vert, searched, largestConnectedSetVerts);
+                for(String adjVert : graph.getAdjacencyList().get(vert))
+                {
+                    if(!searched.containsKey(adjVert))
+                    {
+                        queue.add(adjVert);
+                        searched.put(adjVert, true);
+                    }
+                }
             }
         }
 
         currentVertsPerLine = 0;
         return largestConnectedSetVerts;
-    }
-
-    private void findLargestConnectedSetVertsBFSRecursive(LinkedList<String> queue, HashMap<String, Boolean> searched, ArrayList<String> largestConnectedSetVerts)
-    {
-        //We're done processing the queue
-        if(queue.isEmpty()) return;
-
-        String vert = queue.poll();
-        checkForLargestVert(vert, searched, largestConnectedSetVerts);
-
-        for(String adjVert : graph.getAdjacencyList().get(vert))
-        {
-            if(!searched.containsKey(adjVert))
-            {
-                searched.put(adjVert, true);
-                queue.add(adjVert);
-            }
-        }
-
-        findLargestConnectedSetVertsBFSRecursive(queue, searched, largestConnectedSetVerts);
     }
 
     public ArrayList<String> findLargestConnectedSetVertsDFS()
