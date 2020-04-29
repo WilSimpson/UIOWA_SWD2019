@@ -3,7 +3,7 @@ import java.util.*;
 public class UndirectedGraph<T> extends Graph<T>
 {
     private ArrayList<Edge<T>> edges = new ArrayList<>();
-    private HashMap<T, HashSet<T>> adjList;
+    private HashMap<T, List<T>> adjList;
 
     public UndirectedGraph(String inputFile, Comparator<T> comparator)
     {
@@ -14,7 +14,7 @@ public class UndirectedGraph<T> extends Graph<T>
         //Initialize adjList
         for(int i=0; i<getVerts().size(); i++)
         {
-            adjList.put(getVerts().get(i), new HashSet<>());
+            adjList.put(getVerts().get(i), new ArrayList<>());
         }
 
         //Create edges
@@ -56,7 +56,7 @@ public class UndirectedGraph<T> extends Graph<T>
         return getVerts().size()/total;
     }
 
-    public HashMap<T, HashSet<T>> getAdjacencyList()
+    public HashMap<T, List<T>> getAdjacencyList()
     {
         return adjList;
     }
