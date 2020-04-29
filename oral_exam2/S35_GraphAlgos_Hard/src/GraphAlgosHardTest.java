@@ -1,11 +1,11 @@
-import java.util.Arrays;
 import java.util.List;
 
-public class GraphAlogsMediumTest
+public class GraphAlgosHardTest
 {
     public static void main(String[] args)
     {
         GraphAlgos algos = new GraphAlgos("words.dat");
+        UndirectedGraph<String> graph = algos.getGraph();
         //GraphAlgos algos = new GraphAlgos("words-short.dat");
         //GraphAlgos algos = new GraphAlgos("wordlist.dumb");
         //System.out.println(algos.getGraph().getAverageNumEdges());
@@ -13,11 +13,11 @@ public class GraphAlogsMediumTest
         List<String> list;
 
         System.out.print("BFS: ");
-        list = algos.getGraph().findLargestConnectedSetVertsBFS();
+        list = graph.findLargestConnectedSetVertsBFS();
         System.out.println(list);
 
         System.out.print("DFS: ");
-        list = algos.getGraph().findLargestConnectedSetVertsDFS();
+        list = graph.findLargestConnectedSetVertsDFS();
         System.out.println(list);
 
         //list = algos.getAllConnectedVerts(list);
