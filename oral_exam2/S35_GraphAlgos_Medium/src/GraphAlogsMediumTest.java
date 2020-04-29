@@ -1,7 +1,7 @@
 import java.util.Arrays;
 import java.util.List;
 
-public class GraphAlogsEasierTest
+public class GraphAlogsMediumTest
 {
     public static void main(String[] args)
     {
