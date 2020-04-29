@@ -1,46 +1,31 @@
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.util.*;
 
-public class UndirectedGraph<T>
+public class UndirectedGraph<T> extends Graph<T>
 {
-    private ArrayList<T> verts = new ArrayList<>();
     private ArrayList<Edge<T>> edges = new ArrayList<>();
     private HashMap<T, HashSet<T>> adjList;
 
     public UndirectedGraph(String inputFile, Comparator<T> comparator)
     {
-        try
-        {
-            BufferedReader br = new BufferedReader(new java.io.FileReader(inputFile));
-            String currentLine = "";
-            while((currentLine = br.readLine()) != null)
-            {
-                verts.add((T) currentLine);
-            }
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace();
-        }
+        super(inputFile);
 
-        adjList = new HashMap<>(verts.size());
+        adjList = new HashMap<>(getVerts().size());
 
         //Initialize adjList
-        for(int i=0; i<verts.size(); i++)
+        for(int i=0; i<getVerts().size(); i++)
         {
-            adjList.put(verts.get(i), new HashSet<>());
+            adjList.put(getVerts().get(i), new HashSet<>());
         }
 
         //Create edges
-        for(int i=0; i<verts.size(); i++)
+        for(int i=0; i<getVerts().size(); i++)
         {
-            for(int j=i+1; j<verts.size(); j++)
+            for(int j=i+1; j<getVerts().size(); j++)
             {
-                if(comparator.compare(verts.get(i), verts.get(j)) > 0)
+                if(comparator.compare(getVerts().get(i), getVerts().get(j)) > 0)
                 {
-                    edges.add(new Edge<>(verts.get(i), verts.get(j)));
-                    edges.add(new Edge<>(verts.get(j), verts.get(i)));
+                    edges.add(new Edge<>(getVerts().get(i), getVerts().get(j)));
+                    edges.add(new Edge<>(getVerts().get(j), getVerts().get(i)));
                 }
             }
         }
@@ -68,7 +53,7 @@ public class UndirectedGraph<T>
             total += adjList.get(vert).size();
         }
 
-        return verts.size()/total;
+        return getVerts().size()/total;
     }
 
     public HashMap<T, HashSet<T>> getAdjacencyList()
@@ -81,8 +66,76 @@ public class UndirectedGraph<T>
         return edges;
     }
 
-    public ArrayList<T> getVerts()
+    public List<T> findLargestConnectedSetVertsBFS()
     {
-        return verts;
+        LinkedList<T> largestConnectedSetVerts = new LinkedList<>();
+        HashMap<T, Boolean> searched = new HashMap<>();
+        LinkedList<T> queue = new LinkedList<>();
+
+        for(T startingVert : getVerts())
+        {
+            if(!searched.containsKey(startingVert))
+            {
+                searched.put(startingVert, true);
+                queue.add(startingVert);
+            }
+
+            LinkedList<T> currentConnectVerts = new LinkedList<>();
+
+            while(!queue.isEmpty())
+            {
+
+                T vert = queue.poll();
+                currentConnectVerts.add(vert);
+                for(T adjVert : getAdjacencyList().get(vert))
+                {
+                    if(!searched.containsKey(adjVert))
+                    {
+                        searched.put(adjVert, true);
+                        queue.add(adjVert);
+                    }
+                }
+
+                if(currentConnectVerts.size() > largestConnectedSetVerts.size())
+                    largestConnectedSetVerts = currentConnectVerts;
+            }
+        }
+
+        return largestConnectedSetVerts;
+    }
+
+    public List<T> findLargestConnectedSetVertsDFS()
+    {
+        LinkedList<T> largestConnectedSetVerts = new LinkedList<>();
+
+        HashMap<T, Boolean> searched = new HashMap<>();
+
+        for(T vert : getVerts())
+        {
+            LinkedList<T> currentConnectedVerts = new LinkedList<>();
+            if(!searched.containsKey(vert))
+            {
+                searched.put(vert, true);
+                findLargestConnectedSetVertsDFSRecursive(vert, searched, currentConnectedVerts);
+
+                if(currentConnectedVerts.size() > largestConnectedSetVerts.size())
+                    largestConnectedSetVerts = currentConnectedVerts;
+            }
+        }
+
+        return largestConnectedSetVerts;
+    }
+
+    private void findLargestConnectedSetVertsDFSRecursive(T vert, Map<T, Boolean> searched, List<T> currentConnectedVerts)
+    {
+        currentConnectedVerts.add(vert);
+        searched.put(vert, true);
+        for(T adjVert : getAdjacencyList().get(vert))
+        {
+            if(!searched.containsKey(adjVert))
+            {
+                findLargestConnectedSetVertsDFSRecursive(adjVert, searched, currentConnectedVerts);
+            }
+        }
     }
 }

@@ -13,11 +13,11 @@ public class GraphAlogsEasierTest
         List<String> list;
 
         System.out.print("BFS: ");
-        list = algos.findLargestConnectedSetVertsBFS();
+        list = algos.getGraph().findLargestConnectedSetVertsBFS();
         System.out.println(list);
 
         System.out.print("DFS: ");
-        list = algos.findLargestConnectedSetVertsDFS();
+        list = algos.getGraph().findLargestConnectedSetVertsDFS();
         System.out.println(list);
 
         //list = algos.getAllConnectedVerts(list);
