@@ -3,12 +3,7 @@ import java.util.*;
 
 public class GraphAlgos
 {
-    private int currentVertsPerLine = 0;
-    private int maxVertsPerLine = 10;
-
     private UndirectedGraph<String> graph;
-
-
 
     public GraphAlgos(String inputFile)
     {
@@ -70,9 +65,9 @@ public class GraphAlgos
         return graph;
     }
 
-    public ArrayList<String> findLargestConnectedSetVertsBFS()
+    public List<String> findLargestConnectedSetVertsBFS()
     {
-        ArrayList<String> largestConnectedSetVerts = new ArrayList<>();
+        LinkedList<String> largestConnectedSetVerts = new LinkedList<>();
         HashMap<String, Boolean> searched = new HashMap<>();
         LinkedList<String> queue = new LinkedList<>();
 
@@ -80,85 +75,71 @@ public class GraphAlgos
         {
             if(!searched.containsKey(startingVert))
             {
+                searched.put(startingVert, true);
                 queue.add(startingVert);
             }
 
+            LinkedList<String> currentConnectVerts = new LinkedList<>();
+
             while(!queue.isEmpty())
             {
+
                 String vert = queue.poll();
-                checkForLargestVert(vert, searched, largestConnectedSetVerts);
+                currentConnectVerts.add(vert);
                 for(String adjVert : graph.getAdjacencyList().get(vert))
                 {
                     if(!searched.containsKey(adjVert))
                     {
-                        queue.add(adjVert);
                         searched.put(adjVert, true);
+                        queue.add(adjVert);
                     }
                 }
+
+                if(currentConnectVerts.size() > largestConnectedSetVerts.size())
+                    largestConnectedSetVerts = currentConnectVerts;
             }
         }
 
-        currentVertsPerLine = 0;
         return largestConnectedSetVerts;
     }
 
-    public ArrayList<String> findLargestConnectedSetVertsDFS()
+    public List<String> findLargestConnectedSetVertsDFS()
     {
-        ArrayList<String> largestConnectedSetVerts = new ArrayList<>();
+        LinkedList<String> largestConnectedSetVerts = new LinkedList<>();
+
         HashMap<String, Boolean> searched = new HashMap<>();
 
         for(String vert : graph.getVerts())
         {
+            LinkedList<String> currentConnectedVerts = new LinkedList<>();
             if(!searched.containsKey(vert))
-                findLargestConnectedSetVertsDFSRecursive(vert, searched, largestConnectedSetVerts);
+            {
+                searched.put(vert, true);
+                findLargestConnectedSetVertsDFSRecursive(vert, searched, currentConnectedVerts);
+
+                if(currentConnectedVerts.size() > largestConnectedSetVerts.size())
+                    largestConnectedSetVerts = currentConnectedVerts;
+            }
         }
 
-        currentVertsPerLine = 0;
         return largestConnectedSetVerts;
     }
 
-    private void findLargestConnectedSetVertsDFSRecursive(String vert, HashMap<String, Boolean> searched, ArrayList<String> largestConnectedSetVerts)
+    private void findLargestConnectedSetVertsDFSRecursive(String vert, Map<String, Boolean> searched, List<String> currentConnectedVerts)
     {
-        checkForLargestVert(vert, searched, largestConnectedSetVerts);
-
+        currentConnectedVerts.add(vert);
+        searched.put(vert, true);
         for(String adjVert : graph.getAdjacencyList().get(vert))
         {
             if(!searched.containsKey(adjVert))
             {
-                findLargestConnectedSetVertsDFSRecursive(adjVert, searched, largestConnectedSetVerts);
+                findLargestConnectedSetVertsDFSRecursive(adjVert, searched, currentConnectedVerts);
             }
         }
     }
 
-    public void checkForLargestVert(String vert, HashMap<String, Boolean> searched, ArrayList<String> largestConnectedSetVerts)
-    {
-        System.out.print(vert+getSpacerType());
 
-        //Mark the vert as searched
-        searched.put(vert, true);
-
-        //Check current and current largest set of verts
-        int currentLargestNumVertEdges = 0;
-        if(largestConnectedSetVerts.size() > 0)
-            currentLargestNumVertEdges = graph.getAdjacencyList().get(largestConnectedSetVerts.get(0)).size();
-
-        int currentNumVertEdges = graph.getAdjacencyList().get(vert).size();
-
-        //If larger clear and add current
-        if(currentNumVertEdges > currentLargestNumVertEdges)
-        {
-            largestConnectedSetVerts.clear();
-            largestConnectedSetVerts.add(vert);
-        }
-        //They're the same, add it to the list
-        else if(currentNumVertEdges == currentLargestNumVertEdges)
-        {
-            largestConnectedSetVerts.add(vert);
-        }
-    }
-
-
-    public void printLargestConnectedSetVerts(ArrayList<String> list)
+    public void printLargestConnectedSetVerts(List<String> list)
     {
         for(String vert : list)
         {
@@ -172,26 +153,7 @@ public class GraphAlgos
     {
         for(String adjVert : graph.getAdjacencyList().get(vert))
         {
-            System.out.print(adjVert+getSpacerType());
+            System.out.print(adjVert+", ");
         }
-
-        currentVertsPerLine = 0;
-    }
-
-    private String getSpacerType()
-    {
-        String spacer;
-        if(currentVertsPerLine < maxVertsPerLine)
-        {
-            currentVertsPerLine++;
-            spacer = ", ";
-        }
-        else
-        {
-            currentVertsPerLine = 0;
-            spacer = "\n";
-        }
-
-        return spacer;
     }
 }

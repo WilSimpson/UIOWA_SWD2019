@@ -1,5 +1,5 @@
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
+import java.util.List;
 
 public class GraphAlogsEasierTest
 {
@@ -10,16 +10,20 @@ public class GraphAlogsEasierTest
         //GraphAlgos algos = new GraphAlgos("wordlist.dumb");
         //System.out.println(algos.getGraph().getAverageNumEdges());
 
-        ArrayList<String> list;
+        List<String> list;
 
-        System.out.println("Running BFS:");
+        System.out.print("BFS: ");
         list = algos.findLargestConnectedSetVertsBFS();
-        System.out.println("\n\nLargest set of verts found:");
-        algos.printLargestConnectedSetVerts(list);
+        System.out.println(list);
 
-        System.out.println("\n\nRunning DFS:");
+        System.out.print("DFS: ");
         list = algos.findLargestConnectedSetVertsDFS();
-        System.out.println("\n\nLargest set of verts found:");
-        algos.printLargestConnectedSetVerts(list);
+        System.out.println(list);
+
+        //list = algos.getAllConnectedVerts(list);
+
+        System.out.println("Size of largest connected set: "+list.size());
+
+
     }
 }
