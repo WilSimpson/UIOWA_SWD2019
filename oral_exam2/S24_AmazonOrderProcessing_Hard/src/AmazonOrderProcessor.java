@@ -3,8 +3,6 @@ import java.util.concurrent.Executors;
 
 public class AmazonOrderProcessor
 {
-
-
     public static void main(String[] args)
     {
         Buffer aws_sc1 = createBuffer();
@@ -43,6 +41,6 @@ public class AmazonOrderProcessor
 
     public static Buffer createBuffer()
     {
-        return new Buffer(25);
+        return new Buffer(5);
     }
 }

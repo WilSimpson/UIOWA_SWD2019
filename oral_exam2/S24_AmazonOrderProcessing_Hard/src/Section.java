@@ -17,18 +17,18 @@ public class Section extends Node
     {
         while(!getInputBuffer().isEmpty())
         {
-            //try
-            // {
-            Order currentOrder = getBlocking();
-            currentOrder.setSection(this);
-            //Thread.sleep(random.nextInt(5000));
-            //Thread.sleep(random.nextInt(1));
-            putBlocking(currentOrder);
-            //}
-            //catch(InterruptedException e)
-            //{
-            //    e.printStackTrace();
-            //}
+            try
+            {
+                Order currentOrder = getBlocking();
+                currentOrder.setSection(this);
+                Thread.sleep(random.nextInt(5000));
+                //Thread.sleep(random.nextInt(1));
+                putBlocking(currentOrder);
+            }
+            catch(InterruptedException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 

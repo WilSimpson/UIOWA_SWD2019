@@ -48,8 +48,6 @@ public class AmazonWebServer extends Node
                 {
                     putBlocking(currentOrder, 1);
                 }
-
-                notifyAll();
             }
         }
     }

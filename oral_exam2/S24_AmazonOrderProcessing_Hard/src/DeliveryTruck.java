@@ -1,8 +1,5 @@
 import java.security.SecureRandom;
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
 
 public class DeliveryTruck extends Node
 {
@@ -44,34 +41,41 @@ public class DeliveryTruck extends Node
     @Override
     public void doFinally()
     {
-        deliver();
+        if(hasDelivery()) deliver();
         System.out.println("Truck "+truckNumber+": No more deliveries!");
         debugNode();
     }
 
-    private void deliver()
+
+
+    private synchronized void deliver()
     {
-        while(waitingDeliveries.peek() != null)
+        while(hasDelivery())
         {
-           //try
-           //{
+           try
+           {
                 Order currentOrder = waitingDeliveries.pop();
 
-                //Thread.sleep(random.nextInt(10*1000));
+                Thread.sleep(random.nextInt(10*1000));
                 //Thread.sleep(random.nextInt(1));
                 //TimeUnit.MILLISECONDS.sleep(ThreadLocalRandom.current().nextInt(0, 1000));
 
                 currentOrder.setDelivered();
                 System.out.println(currentOrder);
                 deliveriesCompleted++;
-            //}
-            //catch(InterruptedException e)
-            //{
-            //    e.printStackTrace();
-            //}
+            }
+            catch(InterruptedException e)
+            {
+                e.printStackTrace();
+            }
         }
 
-        System.out.println("Truck "+truckNumber+": Finished deliveries.");
+        //System.out.println("Truck "+truckNumber+": Finished deliveries.");
+    }
+
+    public synchronized boolean hasDelivery()
+    {
+        return waitingDeliveries.peek() != null;
     }
 
     public int getTruckNumber()

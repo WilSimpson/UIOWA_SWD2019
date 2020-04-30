@@ -16,12 +16,11 @@ public abstract class Node implements Runnable
     }
 
     @Override
-    public final synchronized void run()
+    public final void run()
     {
         while(!isUpstreamFinished())
-        {
             doOperations();
-        }
+
         doOperations();
         doFinally();
         closeNode();
@@ -110,6 +109,6 @@ public abstract class Node implements Runnable
             }
         }
 
-        System.out.println(String.format("%s: %s", toString(), s.substring(0,s.length()-2)));
+        //System.out.println(String.format("%s: %s", toString(), s.substring(0,s.length()-2)));
     }
 }
