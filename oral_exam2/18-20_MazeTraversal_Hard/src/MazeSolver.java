@@ -1,22 +1,66 @@
-import java.nio.CharBuffer;
-import java.util.Arrays;
-
+/**
+ * Solves a 2D maze given an array of positions of the map.
+ *
+ * @author Wil Simpson
+ */
 public class MazeSolver
 {
+    /**
+     * Char that cannot be traversed
+     */
     private char mazeWall;
+
+    /**
+     * Char that can be traversed
+     */
     private char mazePath;
+
+    /**
+     * Char to mark that as a correct maze path
+     */
     private char movedChar;
+
+    /**
+     * Char to mark path leads to a deadend
+     */
     private char deadEndChar;
 
+    /**
+     * Time to sleep between maze traversals
+     */
     private long sleepTime;
 
+    /**
+     * Starting row position, starting index at 0
+     */
     private int startingRow;
+
+    /**
+     * Starting col position, starting index at 0
+     */
     private int startingCol;
 
-    public boolean noMoreMovesPossible = false;
+    /**
+     * Whether the current mazeTraversal is at the starting point
+     */
     public boolean isStartOfMaze = true;
+
+    /**
+     * Whether the current mazeTraversal has been solved
+     */
     public boolean solved = false;
 
+    /**
+     * Initiailize a MazeSolver with the given parameters
+     *
+     * @param mazeWall non-traversable position
+     * @param mazePath traversable position
+     * @param movedChar marker to show that moved to
+     * @param deadEndChar marker to show a deadend has been reached on that path
+     * @param startingRow starting row in maze
+     * @param startingCol starting col in maze
+     * @param sleepTime sleep time between maze traversals
+     */
     public MazeSolver(char mazeWall, char mazePath, char movedChar, char deadEndChar, int startingRow, int startingCol, long sleepTime)
     {
         this.mazeWall = mazeWall;
@@ -33,17 +77,19 @@ public class MazeSolver
      *  Increase or decreasing the col traverses the maze to the right or left respectively.
      *
      *
-     * @param maze
-     * @param row
-     * @param col
+     * @param maze 2D maze to traverse
+     * @param row current row position
+     * @param col current col position
      * @return whether the maze was solved or not
+     *
+     * @throws InterruptedException thrown if thread is interrupted during sleep
      */
     public boolean mazeTraversal(char[][] maze, int row, int col) throws InterruptedException
     {
         printMaze(maze);
         Thread.sleep(sleepTime);
 
-        isStartOfMaze = startingRow == row && startingCol == col;
+        boolean isStartOfMaze = startingRow == row && startingCol == col;
 
         //Maze solved if we reach an edge and we're not at the start
         if(!isStartOfMaze
@@ -72,6 +118,17 @@ public class MazeSolver
         return solved;
     }
 
+    /**
+     * Moves to the position if possible and marks it with the given charType
+     *
+     * @param maze 2D maze to traverse
+     * @param row current row to move from
+     * @param col current col to move from
+     * @param movedChar traversable char
+     * @param charType char to use as mark
+     *
+     * @throws InterruptedException thrown if thread is interrupted during sleep
+     */
     private void tryMoveTo(char[][] maze, int row, int col, char movedChar, char charType) throws InterruptedException
     {
         //Check up
@@ -100,6 +157,15 @@ public class MazeSolver
         }
     }
 
+    /**
+     * Checks if the given char is traversable
+     *
+     * @param maze 2D maze to check against
+     * @param row row to check
+     * @param col col to check
+     * @param moveableChar acceptable char to move to
+     * @return true if it can move to
+     */
     public boolean canMoveTo(char[][] maze, int row, int col, char moveableChar)
     {
         try
@@ -113,6 +179,11 @@ public class MazeSolver
     }
 
 
+    /**
+     * Prints a given maze
+     *
+     * @param maze maze to print
+     */
     public static void printMaze(char[][] maze)
     {
         System.out.println("--------- PRINTED MAZE --------\n");
@@ -126,6 +197,14 @@ public class MazeSolver
         }
         System.out.println("\n-------------------------------\n");
     }
+
+    /**
+     * Prints a given maze and replaces instances of the deadEndChar with the mazePath char
+     *
+     * @param maze maze to print
+     * @param deadEndChar char that will be replaced
+     * @param mazePath char that will replace
+     */
     public static void printMaze(char[][] maze, char deadEndChar, char mazePath)
     {
         System.out.println("--------- PRINTED MAZE --------\n");

@@ -1,5 +1,13 @@
+/**
+ *
+ *
+ * @author Wil Simpson
+ */
 public class MazeTraversal
 {
+    /**
+     * Example maze
+     */
     private static char [][] maze = {
             {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#'},
             {'#', '.', '.', '.', '#', '.', '.', '.', '.', '.', '.', '#'},
@@ -15,6 +23,13 @@ public class MazeTraversal
             {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#'},
     };
 
+    /**
+     * Shows how the MazeSolver can be used to solve a given maze. No runtime arguments are needed.
+     *
+     * @param args runtime arguments
+     *
+     * @throws InterruptedException thrown if the sleep is interrupted
+     */
     public static void main(String[] args) throws InterruptedException
     {
         int startRow = 2;
