@@ -1,16 +1,10 @@
-public class ShippingCenter implements Runnable
+public class ShippingCenter extends Node
 {
-    private OrderBuffer ib_AWS;
-    private OrderBuffer ob_S1;
-    private OrderBuffer ob_S2;
-
     private int number;
 
-    public ShippingCenter(OrderBuffer ib_AWS, OrderBuffer ob_S1, OrderBuffer ob_S2, int number)
+    public ShippingCenter(Buffer ib_AWS, Buffer ob_S1, Buffer ob_S2, int number)
     {
-        this.ib_AWS = ib_AWS;
-        this.ob_S1 = ob_S1;
-        this.ob_S2 = ob_S2;
+        super(ib_AWS, new Buffer[]{ob_S1, ob_S2});
         this.number = number;
     }
 
@@ -20,27 +14,28 @@ public class ShippingCenter implements Runnable
     }
 
     @Override
-    public synchronized void run()
+    public void doOperations()
     {
-        while(ib_AWS.shouldContinueAcceptingInput())
+        while(!getInputBuffer().isEmpty())
         {
-            Order currentOrder = ib_AWS.getBlocking();
+            Order currentOrder = getBlocking();
             currentOrder.setShippingCenter(this);
 
             if(currentOrder.getCategory().toLowerCase().charAt(0) <= 'p')
             {
-                ob_S1.putBlocking(currentOrder);
+                putBlocking(currentOrder, 0);
             }
             else
             {
-                ob_S2.putBlocking(currentOrder);
+                putBlocking(currentOrder, 1);
             }
-
         }
+    }
 
-        ob_S1.setUpstreamFinished();
-        ob_S2.setUpstreamFinished();
-        notifyAll();
+    @Override
+    public void doFinally()
+    {
         System.out.println("SC: Finished processing all orders");
+        debugNode();
     }
 }

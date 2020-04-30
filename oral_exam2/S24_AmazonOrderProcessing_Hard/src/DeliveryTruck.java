@@ -1,24 +1,22 @@
 import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
 
-public class DeliveryTruck implements Runnable
+public class DeliveryTruck extends Node
 {
     private SecureRandom random = new SecureRandom();
 
-    private OrderBuffer ib_SD;
     private int truckNumber;
 
     private int deliveriesCompleted = 0;
 
-    private ArrayBlockingQueue<Order> deliveryQueue = new ArrayBlockingQueue<>(10);
+    private LinkedList<Order> waitingDeliveries = new LinkedList<>();
 
-    ArrayBlockingQueue<Order> deliveries = new ArrayBlockingQueue<>(4);
-
-    public DeliveryTruck(OrderBuffer ib_SD, int truckNumber)
+    public DeliveryTruck(Buffer ib_SD, int truckNumber)
     {
-        this.ib_SD = ib_SD;
+        super(ib_SD, null);
         this.truckNumber = truckNumber;
     }
 
@@ -28,77 +26,52 @@ public class DeliveryTruck implements Runnable
     }
 
     @Override
-    public synchronized void run()
+    public void doOperations()
     {
-
-        while(ib_SD.shouldContinueAcceptingInput())
+        while(!getInputBuffer().isEmpty())
         {
-            Order currentOrder = ib_SD.getBlocking();
+            Order currentOrder = getBlocking();
             currentOrder.setDeliveryTruck(this);
-            deliveryQueue.add(currentOrder);
+            waitingDeliveries.add(currentOrder);
 
-            if(deliveryQueue.size() == 4 || ib_SD.isBufferEmpty())
+            if(waitingDeliveries.size() == 4)
             {
-                while(deliveryQueue.peek() != null)
-                {
-                    try
-                    {
-                        currentOrder = deliveryQueue.take();
-
-                        //Thread.sleep(random.nextInt(10*1000));
-                        Thread.sleep(random.nextInt(1));
-                        //TimeUnit.MILLISECONDS.sleep(ThreadLocalRandom.current().nextInt(0, 1000));
-
-                        currentOrder.setDelivered();
-                        System.out.println(currentOrder);
-                        deliveriesCompleted++;
-                    }
-                    catch(InterruptedException e)
-                    {
-                        e.printStackTrace();
-                    }
-                }
-
-                System.out.println("Truck "+truckNumber+": Finished deliveries.");
+                deliver();
             }
         }
+    }
 
-        notifyAll();
+    @Override
+    public void doFinally()
+    {
+        deliver();
         System.out.println("Truck "+truckNumber+": No more deliveries!");
+        debugNode();
+    }
 
-
-        /*
-        if(ib_SD.isUpstreamFinished() && ib_SD.isBufferEmpty())
+    private void deliver()
+    {
+        while(waitingDeliveries.peek() != null)
         {
-            notifyAll();
-            System.out.println("Truck "+truckNumber+": No more deliveries!");
-        }
+           //try
+           //{
+                Order currentOrder = waitingDeliveries.pop();
 
-        try
-        {
-            //Wait until the buffer is at 4 or finished being processed
-            while(!(ib_SD.getBufferSize() < 4) && !ib_SD.isUpstreamFinished())
-            {
-                wait();
-            }
+                //Thread.sleep(random.nextInt(10*1000));
+                //Thread.sleep(random.nextInt(1));
+                //TimeUnit.MILLISECONDS.sleep(ThreadLocalRandom.current().nextInt(0, 1000));
 
-            ib_SD.drainQueueTo(deliveries);
-            Order currentOrder;
-            while((currentOrder = deliveries.take()) != null)
-            {
-                currentOrder.setDeliveryTruck(this);
-                Thread.sleep(random.nextInt(10*1000));
                 currentOrder.setDelivered();
                 System.out.println(currentOrder);
                 deliveriesCompleted++;
-            }
-        }
-        catch(InterruptedException e)
-        {
-            e.printStackTrace();
+            //}
+            //catch(InterruptedException e)
+            //{
+            //    e.printStackTrace();
+            //}
         }
 
-         */
+        System.out.println("Truck "+truckNumber+": Finished deliveries.");
     }
 
     public int getTruckNumber()

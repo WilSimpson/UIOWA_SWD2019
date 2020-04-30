@@ -1,19 +1,23 @@
 import java.util.concurrent.ArrayBlockingQueue;
 
-public class OrderBuffer
+public class Buffer
 {
+    private static int CURRENT_BUFFER_ID = 0;
+    private final int bufferID;
     private ArrayBlockingQueue<Order> queue;
 
     private boolean upstreamFinished = false;
 
-    public OrderBuffer()
+    public Buffer()
     {
         this(1);
     }
 
-    public OrderBuffer(int queueSize)
+    public Buffer(int queueSize)
     {
         queue = new ArrayBlockingQueue<>(queueSize);
+        bufferID = CURRENT_BUFFER_ID;
+        CURRENT_BUFFER_ID++;
     }
 
     public synchronized void putBlocking(Order order)
@@ -26,7 +30,7 @@ public class OrderBuffer
                 wait();
             }
 
-            queue.add(order);
+            queue.put(order);
             notifyAll();
         }
         catch(InterruptedException e)
@@ -40,7 +44,7 @@ public class OrderBuffer
         Order order = null;
         try
         {
-            while(queue.size() == 0 || !upstreamFinished)
+            while(queue.size() == 0)
             {
                 notifyAll();
                 wait();
@@ -68,23 +72,34 @@ public class OrderBuffer
         return upstreamFinished;
     }
 
-    public synchronized boolean isBufferEmpty()
+    public synchronized boolean isEmpty()
     {
         return queue.size() == 0;
     }
 
-    public synchronized int getBufferSize()
+    public synchronized int size()
     {
         return queue.size();
     }
 
-    public synchronized boolean isBufferFull()
+    public synchronized boolean isFull()
     {
         return queue.remainingCapacity() == 0;
     }
 
     public synchronized boolean shouldContinueAcceptingInput()
     {
-        return !(isUpstreamFinished() && isBufferEmpty());
+        if(upstreamFinished)
+        {
+            return queue.size() == 0;
+        }
+
+        return queue.size() != 0;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return getClass().getCanonicalName()+"["+bufferID+"]("+queue.size()+")";
     }
 }

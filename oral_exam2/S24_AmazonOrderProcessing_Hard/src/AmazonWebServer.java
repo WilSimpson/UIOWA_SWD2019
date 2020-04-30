@@ -1,9 +1,9 @@
-public class AmazonWebServer implements Runnable
+import java.util.Arrays;
+import java.util.LinkedList;
+
+public class AmazonWebServer extends Node
 {
     private CSVReader csvReader;
-
-    private OrderBuffer ob_SC1;
-    private OrderBuffer ob_SC2;
 
     private static final int ADDRESS_CSV_INDEX  = 0;
     private static final int CITY_CSV_INDEX     = 1;
@@ -13,15 +13,14 @@ public class AmazonWebServer implements Runnable
     private static final int ITEM_CSV_INDEX     = 5;
     private static final int CATEGORY_CSV_INDEX = 6;
 
-    public AmazonWebServer(OrderBuffer ob_SC1, OrderBuffer ob_SC2, String inputFileName)
+    public AmazonWebServer(Buffer ob_SC1, Buffer ob_SC2, String inputFileName)
     {
-        this.ob_SC1 = ob_SC1;
-        this.ob_SC2 = ob_SC2;
+        super(null, new Buffer[]{ob_SC1, ob_SC2});
         this.csvReader = new CSVReader(inputFileName, ",", true);
     }
 
     @Override
-    public synchronized void run()
+    public void doOperations()
     {
         while(!csvReader.finishedReading())
         {
@@ -38,26 +37,27 @@ public class AmazonWebServer implements Runnable
                         orderInfo[CATEGORY_CSV_INDEX]
                 );
 
-                switch(orderInfo[CITY_CSV_INDEX])
+                if(orderInfo[CITY_CSV_INDEX].equals("Los Angeles")
+                        || orderInfo[CITY_CSV_INDEX].equals("San Francisco")
+                        || orderInfo[CITY_CSV_INDEX].equals("Seattle")
+                        || orderInfo[CITY_CSV_INDEX].equals("Denver"))
                 {
-                    case "Los Angeles":
-                    case "San Francisco":
-                    case "Seattle":
-                    case "Denver":
-                        ob_SC1.putBlocking(currentOrder);
-                        break;
-
-                    default:
-                        ob_SC2.putBlocking(currentOrder);
+                    putBlocking(currentOrder, 0);
+                }
+                else
+                {
+                    putBlocking(currentOrder, 1);
                 }
 
                 notifyAll();
             }
         }
-        ob_SC1.setUpstreamFinished();
-        ob_SC2.setUpstreamFinished();
+    }
 
-        notifyAll();
+    @Override
+    public void doFinally()
+    {
         System.out.println("AWS: Finished processing all orders");
+        debugNode();
     }
 }

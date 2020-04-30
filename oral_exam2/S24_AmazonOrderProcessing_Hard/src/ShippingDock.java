@@ -1,42 +1,39 @@
-import java.util.concurrent.ArrayBlockingQueue;
-
-public class ShippingDock implements Runnable
+public class ShippingDock extends Node
 {
-    private OrderBuffer ib_S;
-    private OrderBuffer ob_DT1;
-    private OrderBuffer ob_DT2;
-
-    public ShippingDock(OrderBuffer ib_S, OrderBuffer ob_DT1, OrderBuffer ob_DT2)
+    public ShippingDock(Buffer ib_S, Buffer ob_DT1, Buffer ob_DT2)
     {
-        this.ib_S = ib_S;
-        this.ob_DT1 = ob_DT1;
-        this.ob_DT2 = ob_DT2;
+        super(ib_S, new Buffer[]{ob_DT1, ob_DT2});
     }
 
     @Override
-    public synchronized void run()
+    public void doOperations()
     {
-        while(ib_S.shouldContinueAcceptingInput())
+        while(!getInputBuffer().isEmpty())
         {
-
-            Order currentOrder = ib_S.getBlocking();
-
-            while(currentOrder != null)
-            {
-                if(!ob_DT1.isBufferFull())
-                {
-                    ob_DT1.putBlocking(currentOrder);
-                    currentOrder = null;
-                } else if(!ob_DT2.isBufferFull())
-                {
-                    ob_DT2.putBlocking(currentOrder);
-                    currentOrder = null;
-                }
-            }
+            placeOrder(getInputBuffer().getBlocking());
         }
-        ob_DT1.setUpstreamFinished();
-        ob_DT2.setUpstreamFinished();
-        notifyAll();
-        System.out.println("Shipping Dock: Finished distributing all orders");
+    }
+
+    @Override
+    public void doFinally()
+    {
+        System.out.println("SD: Finished distributing all orders");
+        debugNode();
+    }
+
+    public void placeOrder(Order order)
+    {
+        Buffer[] ob = getOutputBuffers();
+        int i = 0;
+        while(i++ >= 0)
+        {
+            int currentIndex = i%ob.length;
+            if(!ob[currentIndex].isFull())
+            {
+                ob[currentIndex].putBlocking(order);
+                return;
+            }
+            i++;
+        }
     }
 }
