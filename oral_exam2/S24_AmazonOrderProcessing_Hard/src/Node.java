@@ -1,12 +1,40 @@
-public abstract class Node implements Runnable
+/**
+ * A node consists of a single input buffer and 1 or more output buffers. A node starts processing when the run()
+ * is called
+ *
+ * @param <T> Buffer type for the node
+ *
+ * @author Wil Simpson
+ */
+public abstract class Node<T> implements Runnable
 {
+    /**
+     * Next ID for a new node
+     */
     private static int NEXT_ID = 1;
 
+    /**
+     * Node ID
+     */
     private final int nodeID;
-    private Buffer inputBuffer;
-    private Buffer[] outputBuffers;
 
-    public Node(Buffer inputBuffer, Buffer[] outputBuffers)
+    /**
+     * Input buffers
+     */
+    private Buffer<T> inputBuffer;
+
+    /**
+     * Output buffers
+     */
+    private Buffer<T>[] outputBuffers;
+
+    /**
+     * Creates a new node and sets the ID
+     *
+     * @param inputBuffer input buffers
+     * @param outputBuffers output buffers
+     */
+    public Node(Buffer<T> inputBuffer, Buffer<T>[] outputBuffers)
     {
         this.inputBuffer = inputBuffer;
         this.outputBuffers = outputBuffers;
@@ -15,6 +43,10 @@ public abstract class Node implements Runnable
         NEXT_ID++;
     }
 
+    /**
+     * Loops calling the doOperations() until the upstream buffer is finished processing then calls the doFinally()
+     * method and does the final closing operations for the node.
+     */
     @Override
     public final void run()
     {
@@ -23,51 +55,7 @@ public abstract class Node implements Runnable
 
         doOperations();
         doFinally();
-        closeNode();
-    }
 
-    public abstract void doOperations();
-
-    public abstract void doFinally();
-
-    public synchronized int numOutputBuffers()
-    {
-        return outputBuffers.length;
-    }
-
-    public synchronized boolean offer(int bufferIndex)
-    {
-        return outputBuffers[bufferIndex].isFull();
-    }
-
-    public synchronized void putBlocking(Order order, int bufferIndex)
-    {
-        outputBuffers[bufferIndex].putBlocking(order);
-    }
-
-    public synchronized void putBlocking(Order order)
-    {
-        putBlocking(order, 0);
-    }
-
-    public synchronized Order getBlocking()
-    {
-        if(inputBuffer == null) return null;
-        return inputBuffer.getBlocking();
-    }
-
-    public Buffer getInputBuffer()
-    {
-        return inputBuffer;
-    }
-
-    public Buffer[] getOutputBuffers()
-    {
-        return outputBuffers;
-    }
-
-    public synchronized void closeNode()
-    {
         if(outputBuffers != null)
         {
             for(int i=0; i<outputBuffers.length; i++)
@@ -76,39 +64,90 @@ public abstract class Node implements Runnable
             }
         }
 
-        notifyAll();
+        //notifyAll();
     }
 
+    /**
+     * Operations the node should be making
+     */
+    public abstract void doOperations();
+
+    /**
+     * Final operations of the node
+     */
+    public abstract void doFinally();
+
+    /**
+     * Calls put blocking for output buffer
+     *
+     * @param t item to add to buffer
+     * @param bufferIndex index for buffer to add to
+     */
+    public synchronized void putBlocking(T t, int bufferIndex)
+    {
+        outputBuffers[bufferIndex].putBlocking(t);
+    }
+
+    /**
+     * Calls put blocking for the default output buffer
+     *
+     * @param t item to put in buffer
+     */
+    public synchronized void putBlocking(T t)
+    {
+        putBlocking(t, 0);
+    }
+
+    /**
+     * Gets an item from the input buffer
+     *
+     * @return item from input buffer
+     */
+    public synchronized T getBlocking()
+    {
+        if(inputBuffer == null) return null;
+        return inputBuffer.getBlocking();
+    }
+
+    /**
+     * Gets the input buffer
+     *
+     * @return input buffer
+     */
+    public Buffer<T> getInputBuffer()
+    {
+        return inputBuffer;
+    }
+
+    /**
+     * Gets all the output buffers
+     *
+     * @return all output buffers
+     */
+    public Buffer<T>[] getOutputBuffers()
+    {
+        return outputBuffers;
+    }
+
+    /**
+     * Checks if the upstream node is finished
+     *
+     * @return if the upstream node is finished
+     */
     public synchronized boolean isUpstreamFinished()
     {
         if(inputBuffer == null) return true;
         return inputBuffer.isUpstreamFinished();
     }
 
-    public boolean shouldContinueProcessing()
-    {
-        if(inputBuffer == null) return false;
-        return inputBuffer.shouldContinueAcceptingInput();
-    }
-
+    /**
+     * Creates a human readable string name for the node containing the class name and id of the node
+     *
+     * @return node string representation
+     */
     @Override
     public String toString()
     {
         return getClass().getCanonicalName()+"["+nodeID+"]";
-    }
-
-    public void debugNode()
-    {
-        String s = "In"+inputBuffer+", ";
-
-        if(outputBuffers != null)
-        {
-            for(int i = 0; i < outputBuffers.length; i++)
-            {
-                s += "Out"+outputBuffers[i]+", ";
-            }
-        }
-
-        //System.out.println(String.format("%s: %s", toString(), s.substring(0,s.length()-2)));
     }
 }

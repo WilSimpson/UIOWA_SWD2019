@@ -1,44 +1,56 @@
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+/**
+ * Reads values from a given CSV file
+ *
+ * @author Wil Simpson
+ */
 public class CSVReader
 {
-    private String csvSplitChar;
+    /**
+     * Buffered read to handle stream from file
+     */
     private BufferedReader br;
-    private String currentLine;
+
+    /**
+     * Whether the end of the file has been reached
+     */
     private boolean endOfFileReached = false;
 
-    public CSVReader(String inputFileName, String csvSplitChar, boolean skipFirstLine)
+    /**
+     * Creates a new CSVReader from the given input file.
+     *
+     * @param inputFile path to csv file
+     * @param skipFirstLine whether the first line should be skipped
+     */
+    public CSVReader(String inputFile, boolean skipFirstLine)
     {
-        this.csvSplitChar = csvSplitChar;
-
         try
         {
-            br = new BufferedReader(new FileReader(inputFileName));
+            br = new BufferedReader(new FileReader(inputFile));
 
             if(skipFirstLine) br.readLine();
-        }
-        catch(FileNotFoundException e)
-        {
-            e.printStackTrace();
         }
         catch(IOException e)
         {
             e.printStackTrace();
         }
-
-
     }
 
+    /**
+     * Gets the next line from the CSV file
+     *
+     * @return next string values from csv file
+     */
     public String[] getNextLine()
     {
         if(finishedReading()) return null;
 
         try
         {
-            currentLine = br.readLine();
+            String currentLine = br.readLine();
 
             if(currentLine == null)
             {
@@ -47,7 +59,7 @@ public class CSVReader
                 return null;
             }
 
-            return currentLine.split(csvSplitChar);
+            return currentLine.split(",");
         }
         catch(IOException e)
         {
@@ -57,6 +69,11 @@ public class CSVReader
         return null;
     }
 
+    /**
+     * Checks if the CSV reader has finished reading the file
+     *
+     * @return true if the file is done being read
+     */
     public boolean finishedReading()
     {
         return endOfFileReached;

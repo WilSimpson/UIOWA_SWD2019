@@ -1,24 +1,66 @@
-import java.util.Arrays;
-import java.util.LinkedList;
-
-public class AmazonWebServer extends Node
+/**
+ * Reads from a given CSV file with order information and sends it to an output buffer
+ *
+ * @author Wil Simpson
+ */
+public class AmazonWebServer extends Node<Order>
 {
+    /**
+     * CSVReader used to process file
+     */
     private CSVReader csvReader;
 
+    /**
+     * Index of address in CSV file
+     */
     private static final int ADDRESS_CSV_INDEX  = 0;
+
+    /**
+     * Index of city in CSV file
+     */
     private static final int CITY_CSV_INDEX     = 1;
+
+    /**
+     * Index of state in CSV file
+     */
     private static final int STATE_CSV_INDEX    = 2;
+
+    /**
+     * Index of zip in CSV file
+     */
     private static final int ZIP_CSV_INDEX      = 3;
+
+    /**
+     * Index of name in CSV file
+     */
     private static final int NAME_CSV_INDEX     = 4;
+
+    /**
+     * Index of item in CSV file
+     */
     private static final int ITEM_CSV_INDEX     = 5;
+
+    /**
+     * Index of category in CSV file
+     */
     private static final int CATEGORY_CSV_INDEX = 6;
 
-    public AmazonWebServer(Buffer ob_SC1, Buffer ob_SC2, String inputFileName)
+    /**
+     * Initializes the node
+     *
+     * @param ob_SC1 output buffer to shipping center 1
+     * @param ob_SC2 output buffer to shipping center 2
+     * @param inputFile path to the csv file to process
+     */
+    public AmazonWebServer(Buffer<Order> ob_SC1, Buffer<Order> ob_SC2, String inputFile)
     {
         super(null, new Buffer[]{ob_SC1, ob_SC2});
-        this.csvReader = new CSVReader(inputFileName, ",", true);
+        this.csvReader = new CSVReader(inputFile, true);
     }
 
+    /**
+     * Processes all entries in the CSV, creates an order for each entry and sends it to the correct output buffer.
+     */
     @Override
     public void doOperations()
     {
@@ -52,10 +94,12 @@ public class AmazonWebServer extends Node
         }
     }
 
+    /**
+     * Prints the AWS is done processing all orders
+     */
     @Override
     public void doFinally()
     {
         System.out.println("AWS: Finished processing all orders");
-        debugNode();
     }
 }

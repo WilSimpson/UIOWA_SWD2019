@@ -1,27 +1,46 @@
 import java.security.SecureRandom;
 import java.util.LinkedList;
 
-public class DeliveryTruck extends Node
+/**
+ * A delivery truck takes input from a buffer and puts it in a delivery queue. Once a delivery queue size is exactly 4
+ * the truck will start to deliver the orders. If the upstream node is finished the truck will deliver anything in
+ * their queue and close. The truck will sleep a random amount of time between 0 - 10 seconds between each delivery.
+ *
+ * @author Wil Simpson
+ */
+public class DeliveryTruck extends Node<Order>
 {
+    /**
+     * Number generator to generate random sleep times
+     */
     private SecureRandom random = new SecureRandom();
 
+    /**
+     * Number of the truck
+     */
     private int truckNumber;
 
-    private int deliveriesCompleted = 0;
-
+    /**
+     * Queue of deliveries waiting to be processed
+     */
     private LinkedList<Order> waitingDeliveries = new LinkedList<>();
 
-    public DeliveryTruck(Buffer ib_SD, int truckNumber)
+    /**
+     * Creates a new delivery truck
+     *
+     * @param ib_SD input buffer from shipping dock
+     * @param truckNumber truck number
+     */
+    public DeliveryTruck(Buffer<Order> ib_SD, int truckNumber)
     {
         super(ib_SD, null);
         this.truckNumber = truckNumber;
     }
 
-    public int getDeliveriesCompleted()
-    {
-        return deliveriesCompleted;
-    }
-
+    /**
+     * Processes orders from the input buffer. If there are exactly 4 waiting deliveries in the trucks queue he will
+     * deliver them.
+     */
     @Override
     public void doOperations()
     {
@@ -38,46 +57,54 @@ public class DeliveryTruck extends Node
         }
     }
 
+    /**
+     * The truck will make any deliveries and notify that it has finished making all deliveries
+     */
     @Override
     public void doFinally()
     {
         if(hasDelivery()) deliver();
         System.out.println("Truck "+truckNumber+": No more deliveries!");
-        debugNode();
     }
 
-
-
+    /**
+     * Delivers all orders in the delivery queue
+     */
     private synchronized void deliver()
     {
         while(hasDelivery())
         {
            try
            {
-                Order currentOrder = waitingDeliveries.pop();
+               Order currentOrder = waitingDeliveries.pop();
 
                 Thread.sleep(random.nextInt(10*1000));
-                //Thread.sleep(random.nextInt(1));
-                //TimeUnit.MILLISECONDS.sleep(ThreadLocalRandom.current().nextInt(0, 1000));
 
                 currentOrder.setDelivered();
                 System.out.println(currentOrder);
-                deliveriesCompleted++;
             }
             catch(InterruptedException e)
             {
                 e.printStackTrace();
             }
         }
-
-        //System.out.println("Truck "+truckNumber+": Finished deliveries.");
     }
 
+    /**
+     * Checks whether the current delivery queue is not empty
+     *
+     * @return true if the delivery queue is larger than 0
+     */
     public synchronized boolean hasDelivery()
     {
-        return waitingDeliveries.peek() != null;
+        return waitingDeliveries.size() > 0;
     }
 
+    /**
+     * Gets the truck number
+     *
+     * @return truck number
+     */
     public int getTruckNumber()
     {
         return truckNumber;
