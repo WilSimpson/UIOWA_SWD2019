@@ -25,20 +25,20 @@ public class ShippingDock extends Node<Order>
     @Override
     public void doOperations()
     {
-        while(!getInputBuffer().isEmpty())
+        Order order = getBlocking();
+        if(order != null)
         {
-            Buffer<Order>[] ob = getOutputBuffers();
-            Order order = getBlocking();
-            int i = 0;
-            while(i++ >= 0)
+            if(!isOutputBufferFull(0))
             {
-                int currentIndex = i%ob.length;
-                if(!ob[currentIndex].isFull())
-                {
-                    ob[currentIndex].putBlocking(order);
-                    return;
-                }
-                i++;
+                putBlocking(order, 0);
+            }
+            else if(!isOutputBufferFull(1))
+            {
+                putBlocking(order, 1);
+            }
+            else
+            {
+                putBlocking(order, 0);
             }
         }
     }

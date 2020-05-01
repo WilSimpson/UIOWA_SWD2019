@@ -44,9 +44,9 @@ public class ShippingCenter extends Node<Order>
     @Override
     public void doOperations()
     {
-        while(!getInputBuffer().isEmpty())
+        Order currentOrder = getBlocking();
+        if(currentOrder != null)
         {
-            Order currentOrder = getBlocking();
             currentOrder.setShippingCenter(this);
 
             if(currentOrder.getCategory().toLowerCase().charAt(0) <= 'p')

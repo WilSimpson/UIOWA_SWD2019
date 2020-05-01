@@ -44,9 +44,9 @@ public class DeliveryTruck extends Node<Order>
     @Override
     public void doOperations()
     {
-        while(!getInputBuffer().isEmpty())
+        Order currentOrder = getBlocking();
+        if(currentOrder != null)
         {
-            Order currentOrder = getBlocking();
             currentOrder.setDeliveryTruck(this);
             waitingDeliveries.add(currentOrder);
 
@@ -78,7 +78,7 @@ public class DeliveryTruck extends Node<Order>
            {
                Order currentOrder = waitingDeliveries.pop();
 
-                Thread.sleep(random.nextInt(10*1000));
+                Thread.sleep(random.nextInt(10*1));
 
                 currentOrder.setDelivered();
                 System.out.println(currentOrder);

@@ -50,10 +50,21 @@ public abstract class Node<T> implements Runnable
     @Override
     public final void run()
     {
-        while(!isUpstreamFinished())
-            doOperations();
+        if(inputBuffer != null)
+        {
+            while(!isUpstreamFinished())
+                doOperations();
 
-        doOperations();
+            while(!inputBuffer.isEmpty())
+                doOperations();
+        }
+        else
+        {
+            doOperations();
+        }
+
+
+        //doOperations();
         doFinally();
 
         if(outputBuffers != null)
@@ -63,8 +74,6 @@ public abstract class Node<T> implements Runnable
                 outputBuffers[i].setUpstreamFinished();
             }
         }
-
-        //notifyAll();
     }
 
     /**
@@ -119,24 +128,19 @@ public abstract class Node<T> implements Runnable
         return inputBuffer;
     }
 
-    /**
-     * Gets all the output buffers
-     *
-     * @return all output buffers
-     */
-    public Buffer<T>[] getOutputBuffers()
+    public boolean isOutputBufferFull(int i)
     {
-        return outputBuffers;
+        return outputBuffers[i].isFull();
     }
 
     /**
-     * Checks if the upstream node is finished
+     * Checks if the upstream node is finished. If there is no upstream it returns false.
      *
      * @return if the upstream node is finished
      */
     public synchronized boolean isUpstreamFinished()
     {
-        if(inputBuffer == null) return true;
+        if(inputBuffer == null) return false;
         return inputBuffer.isUpstreamFinished();
     }
 

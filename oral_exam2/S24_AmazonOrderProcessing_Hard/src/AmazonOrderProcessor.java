@@ -70,6 +70,6 @@ public class AmazonOrderProcessor
      */
     public static Buffer<Order> createBuffer()
     {
-        return new Buffer<Order>(5);
+        return new Buffer<Order>(25);
     }
 }

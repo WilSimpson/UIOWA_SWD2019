@@ -88,11 +88,11 @@ public class Buffer<T>
         {
             while(queue.size() == 0)
             {
-                notifyAll();
+                if(upstreamFinished) return null;
                 wait();
             }
 
-            t = queue.take();
+            t = queue.poll();
             notifyAll();
         }
         catch(InterruptedException e)
