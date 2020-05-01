@@ -11,7 +11,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 
-public class Client extends JFrame {
+public class  Client extends JFrame {
     private JTextField enterField; // for entering messages
     private JTextArea displayArea; // for displaying messages
     private DatagramSocket socket; // socket to connect to server

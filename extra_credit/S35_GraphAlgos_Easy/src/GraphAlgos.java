@@ -2,11 +2,11 @@ import java.util.Comparator;
 
 public class GraphAlgos
 {
-    private UndirectedGraph graph;
+    private UndirectedGraph<String> graph;
 
     public GraphAlgos(String inputFile)
     {
-        graph = new UndirectedGraph(inputFile, new Comparator<String>()
+        graph = new UndirectedGraph<>(inputFile, new Comparator<String>()
         {
             @Override
             public int compare(String s1, String s2)

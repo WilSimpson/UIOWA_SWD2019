@@ -1,122 +1,89 @@
 import java.util.*;
+import java.util.stream.Collectors;
 
-public class UndirectedGraph<T> extends Graph<T>
+public class UndirectedGraph<T>
 {
-    private ArrayList<Edge<T>> edges = new ArrayList<>();
-    private HashMap<T, HashSet<T>> adjList;
+    private List<Vertex<T>> verts;
 
-    public UndirectedGraph(String inputFile, Comparator<T> comparator)
+    public UndirectedGraph(List<Vertex<T>> verts)
     {
-        super(inputFile);
+        this.verts = verts;
+    }
 
-        adjList = new HashMap<>(getVerts().size());
-
-        //Initialize adjList
-        for(int i=0; i<getVerts().size(); i++)
-        {
-            adjList.put(getVerts().get(i), new HashSet<>());
-        }
+    public UndirectedGraph(List<Vertex<T>> verts, EdgeEvaluator<T> edgeEvaluator)
+    {
+        this.verts = verts;
 
         //Create edges
-        for(int i=0; i<getVerts().size(); i++)
+        for(int i=0; i<verts.size(); i++)
         {
-            for(int j=i+1; j<getVerts().size(); j++)
+            for(int j=i+1; j<verts.size(); j++)
             {
-                if(comparator.compare(getVerts().get(i), getVerts().get(j)) > 0)
+                Vertex<T> vert1 = verts.get(i);
+                Vertex<T> vert2 = verts.get(j);
+
+                if((vert1 != null && vert2 != null) &&
+                        edgeEvaluator.validEdge(vert1.getValue(), vert2.getValue()))
                 {
-                    edges.add(new Edge<>(getVerts().get(i), getVerts().get(j)));
-                    edges.add(new Edge<>(getVerts().get(j), getVerts().get(i)));
+                    vert1.addEdge(vert2);
+                    vert2.addEdge(vert1);
                 }
             }
         }
+    }
 
-        for(int i=0; i<edges.size(); i++)
+    public void setVerts(List<Vertex<T>> verts)
+    {
+        this.verts = verts;
+    }
+
+    public int getSize()
+    {
+        return verts.size();
+    }
+
+    public Vertex<T> getVertex(T t)
+    {
+        for(Vertex<T> vert : verts)
         {
-            T start = edges.get(i).getStart();
-            T end = edges.get(i).getEnd();
-
-            adjList.get(start).add(end);
-            adjList.get(end).add(start);
-        }
-    }
-
-    public int getNumberEdges(T vert)
-    {
-        return adjList.get(vert).size();
-    }
-
-    public double getAverageNumEdges()
-    {
-        double total = 0;
-        for(T vert : adjList.keySet())
-        {
-            total += adjList.get(vert).size();
-        }
-
-        return getVerts().size()/total;
-    }
-
-    public HashMap<T, HashSet<T>> getAdjacencyList()
-    {
-        return adjList;
-    }
-
-    public ArrayList<Edge<T>> getEdges()
-    {
-        return edges;
-    }
-
-    public List<T> findLargestConnectedSetVertsBFS()
-    {
-        LinkedList<T> largestConnectedSetVerts = new LinkedList<>();
-        HashMap<T, Boolean> searched = new HashMap<>();
-        LinkedList<T> queue = new LinkedList<>();
-
-        for(T startingVert : getVerts())
-        {
-            if(!searched.containsKey(startingVert))
+            if(vert.getValue().equals(t))
             {
-                searched.put(startingVert, true);
+                return vert;
+            }
+        }
+
+        return null;
+    }
+
+    public List<Vertex<T>> findLargestSubsetBFS()
+    {
+        ArrayList<Vertex<T>> largestConnectedSetVerts = new ArrayList<>();
+        HashMap<T, Boolean> searched = new HashMap<>();
+        LinkedList<Vertex<T>> queue = new LinkedList<>();
+
+        for(Vertex<T> startingVert : getVerts())
+        {
+            if(!searched.containsKey(startingVert.getValue()))
+            {
+                searched.put(startingVert.getValue(), true);
                 queue.add(startingVert);
             }
 
-            LinkedList<T> currentConnectVerts = new LinkedList<>();
+            ArrayList<Vertex<T>> currentConnectedVerts = new ArrayList<>();
 
             while(!queue.isEmpty())
             {
 
-                T vert = queue.poll();
-                currentConnectVerts.add(vert);
-                for(T adjVert : getAdjacencyList().get(vert))
+                Vertex<T> vert = queue.poll();
+                currentConnectedVerts.add(vert);
+                for(Vertex<T> adjVert : vert.getEdges())
                 {
-                    if(!searched.containsKey(adjVert))
+                    if(!searched.containsKey(adjVert.getValue()))
                     {
-                        searched.put(adjVert, true);
+                        searched.put(adjVert.getValue(), true);
                         queue.add(adjVert);
                     }
                 }
-
-                if(currentConnectVerts.size() > largestConnectedSetVerts.size())
-                    largestConnectedSetVerts = currentConnectVerts;
-            }
-        }
-
-        return largestConnectedSetVerts;
-    }
-
-    public List<T> findLargestConnectedSetVertsDFS()
-    {
-        LinkedList<T> largestConnectedSetVerts = new LinkedList<>();
-
-        HashMap<T, Boolean> searched = new HashMap<>();
-
-        for(T vert : getVerts())
-        {
-            LinkedList<T> currentConnectedVerts = new LinkedList<>();
-            if(!searched.containsKey(vert))
-            {
-                searched.put(vert, true);
-                findLargestConnectedSetVertsDFSRecursive(vert, searched, currentConnectedVerts);
 
                 if(currentConnectedVerts.size() > largestConnectedSetVerts.size())
                     largestConnectedSetVerts = currentConnectedVerts;
@@ -126,16 +93,66 @@ public class UndirectedGraph<T> extends Graph<T>
         return largestConnectedSetVerts;
     }
 
-    private void findLargestConnectedSetVertsDFSRecursive(T vert, Map<T, Boolean> searched, List<T> currentConnectedVerts)
+    public List<Vertex<T>> findLargestSubsetDFS()
     {
-        currentConnectedVerts.add(vert);
-        searched.put(vert, true);
-        for(T adjVert : getAdjacencyList().get(vert))
+        ArrayList<Vertex<T>> largestConnectedSetVerts = new ArrayList<>();
+        HashMap<T, Boolean> searched = new HashMap<>();
+
+        for(Vertex<T> vert : getVerts())
         {
-            if(!searched.containsKey(adjVert))
+            ArrayList<Vertex<T>> currentConnectedVerts = new ArrayList<>();
+            if(!searched.containsKey(vert.getValue()))
             {
-                findLargestConnectedSetVertsDFSRecursive(adjVert, searched, currentConnectedVerts);
+                searched.put(vert.getValue(), true);
+                findLargestSubsetDFSRecursive(vert, searched, currentConnectedVerts);
+
+                if(currentConnectedVerts.size() > largestConnectedSetVerts.size())
+                    largestConnectedSetVerts = currentConnectedVerts;
             }
         }
+
+        return largestConnectedSetVerts;
+    }
+
+    private void findLargestSubsetDFSRecursive(Vertex<T> vert, Map<T, Boolean> searched, List<Vertex<T>> currentConnectedVerts)
+    {
+        currentConnectedVerts.add(vert);
+        searched.put(vert.getValue(), true);
+        for(Vertex<T> adjVert : vert.getEdges())
+        {
+            if(!searched.containsKey(adjVert.getValue()))
+            {
+                findLargestSubsetDFSRecursive(adjVert, searched, currentConnectedVerts);
+            }
+        }
+    }
+
+    public List<Edge<T>> createEdgeList()
+    {
+        List<Edge<T>> edges = new ArrayList<>();
+        for(Vertex<T> v1 : verts)
+        {
+            for(Vertex<T> v2 : v1.getEdges())
+            {
+               edges.add(new Edge<>(v1, v2, false));
+            }
+        }
+
+        return edges;
+    }
+
+    public List<T> getVertValues()
+    {
+        return getVertValues(verts.size());
+    }
+
+    public List<T> getVertValues(int n)
+    {
+        return verts.stream().parallel().limit(n).map(Vertex::getValue).collect(Collectors.toList());
+    }
+
+    public List<Vertex<T>> getVerts()
+    {
+        return verts;
     }
 }
