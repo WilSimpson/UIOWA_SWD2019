@@ -78,7 +78,7 @@ public class DeliveryTruck extends Node<Order>
            {
                Order currentOrder = waitingDeliveries.pop();
 
-                Thread.sleep(random.nextInt(10*1));
+                Thread.sleep(random.nextInt(10*1000));
 
                 currentOrder.setDelivered();
                 System.out.println(currentOrder);

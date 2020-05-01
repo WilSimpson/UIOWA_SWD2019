@@ -44,7 +44,7 @@ public class Section extends Node<Order>
             try
             {
                 currentOrder.setSection(this);
-                Thread.sleep(random.nextInt(1));
+                Thread.sleep(random.nextInt(5000));
                 //Thread.sleep(random.nextInt(1));
                 putBlocking(currentOrder);
             }

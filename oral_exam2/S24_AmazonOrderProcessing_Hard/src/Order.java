@@ -53,7 +53,7 @@ public class Order
     /**
      * Whether the order has been delivered
      */
-    public boolean delivered = false;
+    private boolean delivered = false;
 
     /**
      * Creates a new order and increments the number of total orders created
