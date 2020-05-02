@@ -1,15 +1,26 @@
 import java.util.*;
-import java.util.stream.Collectors;
 
+/**
+ * Consists of a list of verts on where their adjacent edges are store in the vertex itself
+ *
+ * @param <T> Type of vertex
+ *
+ * @author Wil Simpson
+ */
 public class UndirectedGraph<T>
 {
+    /**
+     * List of vertices in graph
+     */
     private List<Vertex<T>> verts;
 
-    public UndirectedGraph(List<Vertex<T>> verts)
-    {
-        this.verts = verts;
-    }
-
+    /**
+     * Use the edge evaluator to check every vertex in the list against each other to see if it forms an edge. If two
+     * vertices form an edge then both vertices will add the other as an adjacent vertex.
+     *
+     * @param verts list of vertices in graph
+     * @param edgeEvaluator evaluator to use to check edge validity
+     */
     public UndirectedGraph(List<Vertex<T>> verts, EdgeEvaluator<T> edgeEvaluator)
     {
         this.verts = verts;
@@ -32,29 +43,31 @@ public class UndirectedGraph<T>
         }
     }
 
+    /**
+     * Replaces the vertices in the graph with the given vertices
+     *
+     * @param verts new vertices in the graph
+     */
     public void setVerts(List<Vertex<T>> verts)
     {
         this.verts = verts;
     }
 
+    /**
+     * Gets the number of vertices in the graph
+     *
+     * @return nubmer of vertices in the graph
+     */
     public int getSize()
     {
         return verts.size();
     }
 
-    public Vertex<T> getVertex(T t)
-    {
-        for(Vertex<T> vert : verts)
-        {
-            if(vert.getValue().equals(t))
-            {
-                return vert;
-            }
-        }
-
-        return null;
-    }
-
+    /**
+     * Finds the largest subset of adjacent vertices in the graph using a BFS algorithm
+     *
+     * @return largest subset of vertices in the graph
+     */
     public List<Vertex<T>> findLargestSubsetBFS()
     {
         ArrayList<Vertex<T>> largestConnectedSetVerts = new ArrayList<>();
@@ -93,6 +106,11 @@ public class UndirectedGraph<T>
         return largestConnectedSetVerts;
     }
 
+    /**
+     * Finds the largest subset of adjacent vertices in the graph using a DFS algorithm
+     *
+     * @return largest subset of vertices in the graph
+     */
     public List<Vertex<T>> findLargestSubsetDFS()
     {
         ArrayList<Vertex<T>> largestConnectedSetVerts = new ArrayList<>();
@@ -114,6 +132,14 @@ public class UndirectedGraph<T>
         return largestConnectedSetVerts;
     }
 
+    /**
+     * Recursively finds all adjacent verts to the given vert. The vert has already been searched if the searched list
+     * contains the vertex
+     *
+     * @param vert vert to search adjacent verts
+     * @param searched key of the
+     * @param currentConnectedVerts list of adjacent verts
+     */
     private void findLargestSubsetDFSRecursive(Vertex<T> vert, Map<T, Boolean> searched, List<Vertex<T>> currentConnectedVerts)
     {
         currentConnectedVerts.add(vert);
@@ -127,30 +153,11 @@ public class UndirectedGraph<T>
         }
     }
 
-    public List<Edge<T>> createEdgeList()
-    {
-        List<Edge<T>> edges = new ArrayList<>();
-        for(Vertex<T> v1 : verts)
-        {
-            for(Vertex<T> v2 : v1.getEdges())
-            {
-               edges.add(new Edge<>(v1, v2, false));
-            }
-        }
-
-        return edges;
-    }
-
-    public List<T> getVertValues()
-    {
-        return getVertValues(verts.size());
-    }
-
-    public List<T> getVertValues(int n)
-    {
-        return verts.stream().parallel().limit(n).map(Vertex::getValue).collect(Collectors.toList());
-    }
-
+    /**
+     * Gets all vertices in the graph
+     *
+     * @return vertices in the graph
+     */
     public List<Vertex<T>> getVerts()
     {
         return verts;

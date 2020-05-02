@@ -1,63 +1,100 @@
 import java.util.*;
-
+/**
+ * A Minimum Spanning Tree (MST) can be created from any fully connected undirected weighted graph. The MST is a subset
+ * of the edges in such graph that connects all the vertices together, without any cycles and with the minimum possible
+ * total edge weight.
+ *
+ * @param <T> Type of vertices
+ *
+ * @author Wil Simpson
+ */
 public class MST<T>
 {
-    private HashMap<Vertex<T>, WeightedEdge<T>> shortestEdgeTo;
-    private HashMap<Vertex<T>, Integer> distanceToEdge;
-    private List<Vertex<T>> searched;
-    private LinkedList<Vertex<T>> q;
+    /**
+     * All weighted edges in the MST where the key is a unique element that will create a new edge
+     */
+    private HashMap<Vertex<T>, WeightedEdge<T>> mst;
 
-    public MST(WeightedUndirectedGraph<T> g)
+    /**
+     * Creates a MST using Prim's algorithm from the given graph
+     *
+     * @param graph graph to create mst from
+     */
+    public MST(WeightedUndirectedGraph<T> graph)
     {
         //Set size to increase performance
-        shortestEdgeTo  = new HashMap<>(g.getSize());
-        distanceToEdge = new HashMap<>(g.getSize());
-        searched        = new ArrayList<>(g.getSize());
-        q               = new LinkedList<>();
+        mst = new HashMap<>(graph.getSize());
 
-        for(Vertex<T> v : g.getVerts())
-            distanceToEdge.put(v, -1);
+        //Current lightest edge
+        HashMap<Vertex<T>, Integer> vertexWeight = new HashMap<>(graph.getSize());
 
-        for(Vertex<T> v : g.getVerts())
-            prim(g, v);
+        //Set containing all vertices in the MST
+        Set<Vertex<T>> inMST = new HashSet<>(graph.getSize());
 
-    }
+        //Priority Queue containing vertices that may need to be added to the MST ordered by their current lightest edge
+        // to a vertex inside the minimum spanning tree
+        PriorityQueue<Vertex<T>> pq = new PriorityQueue<>(Comparator.comparingInt(vertexWeight::get));
 
-    public void prim(WeightedUndirectedGraph<T> g, Vertex<T> v)
-    {
-        distanceToEdge.put(v, 0);
-        q.add(v);
-        while(!q.isEmpty())
+        for(Vertex<T> v : graph.getVerts())
         {
-            Vertex<T> v1 = q.pop();
-            searched.add(v1);
-            for(Vertex<T> v2 : v.getEdges())
+            vertexWeight.put(v, -1);
+        }
+
+        //Start with a random point on the graph
+        pq.add(graph.getVerts().get(0));
+
+        //Loop until no more points can be added to the graph
+        while(!pq.isEmpty())
+        {
+            //Check if the vertex is in the MST, if it isn't then find the lightest edge and add it to the MST
+            Vertex<T> v1 = pq.poll();
+            if(!inMST.contains(v1))
             {
-                if(!searched.contains(v2))
+                inMST.add(v1);
+                for(Vertex<T> v2 : v1.getEdges())
                 {
-                    int newWeight = g.getWeight(v1, v2);
-                    int oldWeight = distanceToEdge.get(v2);
-                    if(newWeight < oldWeight
-                        || oldWeight == -1)
+                    if(!inMST.contains(v2))
                     {
-                        distanceToEdge.put(v2, newWeight);
-                        shortestEdgeTo.put(v2, new WeightedEdge<>(v1, v2, false, newWeight));
+                        //Checks if the current edge is the lightest
+                        int newWeight = graph.getWeight(v1, v2);
+                        int oldWeight = vertexWeight.get(v2);
+                        if(newWeight < oldWeight
+                                || oldWeight == -1)
+                        {
+                            vertexWeight.put(v2, newWeight);
+                            mst.put(v2, new WeightedEdge<>(v1, v2, false, newWeight));
+                        }
+
+                        //Remove the vertex if it's already in the pq so it's position can be recalculated with it's
+                        //newly found weight value
+                        pq.remove(v2);
+                        pq.add(v2);
                     }
-                    if(!q.contains(v2)) q.add(v2);
                 }
             }
         }
     }
 
+    /**
+     * Creates a new list containing the edges in the MST
+     *
+     * @return a new list containing the edges in the MST
+     */
     public List<WeightedEdge<T>> getEdges()
     {
-        return new ArrayList<>(shortestEdgeTo.values());
+        return new ArrayList<>(mst.values());
     }
 
+    /**
+     * Calculates the weight of every edge in the MST
+     *
+     * @return total weight of the MST
+     */
     public int getWeight()
     {
+        Set<WeightedEdge<T>> mst = new HashSet<>(this.mst.values());
         int weight = 0;
-        for(WeightedEdge<T> e : shortestEdgeTo.values())
+        for(WeightedEdge<T> e : mst)
         {
             weight += e.getWeight();
         }

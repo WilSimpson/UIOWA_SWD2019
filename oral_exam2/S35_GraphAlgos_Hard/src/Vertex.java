@@ -1,59 +1,45 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Vertex<T> extends SimpleVertex<T> implements Comparable<Vertex<T>>
+/**
+ * A vertex that stores all vertices adjacent to itself
+ *
+ * @param <T> Type of vertex
+ */
+public class Vertex<T> extends SimpleVertex<T>
 {
-    private List<Vertex<T>> edges;
+    /**
+     * Adjacent vertices
+     */
+    private List<Vertex<T>> edges = new ArrayList<>();
 
-    public Vertex(T value, boolean directed)
-    {
-        this(value, new ArrayList<>());
-    }
-
-    public Vertex(T value, List<Vertex<T>>  edges)
+    /**
+     * Creates a new vertex given a value
+     *
+     * @param value
+     */
+    public Vertex(T value)
     {
         super(value);
-        this.edges = edges;
     }
 
+    /**
+     * Links a vertex to the current vertex that forms an edge
+     *
+     * @param v adjacent vertex
+     */
     public void addEdge(Vertex<T> v)
     {
         edges.add(v);
     }
 
+    /**
+     * Gets all adjacent vertices
+     *
+     * @return adjacent vertices
+     */
     public List<Vertex<T>> getEdges()
     {
         return edges;
-    }
-
-    public List<WeightedEdge<T>> createWeightedEdges(EdgeWeightEvaluator<T> evaluator)
-    {
-        List<WeightedEdge<T>> newEdges = new ArrayList<>();
-        for(Vertex<T> vert : edges)
-        {
-            newEdges.add(new WeightedEdge<T>(this, vert, false, evaluator.calculateEdgeWeight(this, vert)));
-        }
-
-        return newEdges;
-    }
-
-    @Override
-    public String toString()
-    {
-        return super.toString().substring(1);
-    }
-
-    public String toExpandedString()
-    {
-        String old = super.toString();
-        //old = old.substring(1, old.length()-1);
-        //return old+edges+"}";
-        return old.substring(1, old.length()-1)+","+edges+"}";
-    }
-
-    @Override
-    public int compareTo(Vertex<T> tVertex)
-    {
-        return 0;
     }
 }
