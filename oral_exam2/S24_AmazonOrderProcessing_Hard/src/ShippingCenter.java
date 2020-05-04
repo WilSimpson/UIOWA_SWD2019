@@ -66,6 +66,6 @@ public class ShippingCenter extends Node<Order>
     @Override
     public void doFinally()
     {
-        System.out.println("SC: Finished processing all orders");
+        //System.out.println("SC: Finished processing all orders");
     }
 }

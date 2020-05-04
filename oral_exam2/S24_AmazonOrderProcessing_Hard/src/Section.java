@@ -61,7 +61,7 @@ public class Section extends Node<Order>
     @Override
     public void doFinally()
     {
-        System.out.println("Section: Finished processing all orders");
+        //System.out.println("Section: Finished processing all orders");
     }
 
     /**

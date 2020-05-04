@@ -49,6 +49,6 @@ public class ShippingDock extends Node<Order>
     @Override
     public void doFinally()
     {
-        System.out.println("SD: Finished distributing all orders");
+        //System.out.println("SD: Finished distributing all orders");
     }
 }
