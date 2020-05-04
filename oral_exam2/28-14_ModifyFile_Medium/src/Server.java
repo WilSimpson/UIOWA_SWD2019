@@ -1,3 +1,5 @@
+import javafx.concurrent.Task;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
@@ -5,6 +7,8 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Server based off Fig. 28.7. Creates a DatagramSocket socket and listens for data on port 5000. Once data is recieved
@@ -60,41 +64,47 @@ public class Server extends JFrame
     public void waitForPackets()
     {
         // updates displayArea
-        SwingUtilities.invokeLater(
-                () -> {
-                    while(true)
+        Task<Boolean> task = new Task<Boolean>()
+        {
+            @Override
+            protected Boolean call()
+            {
+                while(true)
+                {
+                    try
                     {
-                        try // receive packet, display contents, return copy to client
-                        {
-                            byte[] data = new byte[10000]; // set up packet
-                            DatagramPacket receivePacket =
-                                    new DatagramPacket(data, data.length);
+                        byte[] data = new byte[10000];
+                        DatagramPacket receivePacket =
+                                new DatagramPacket(data, data.length);
 
-                            socket.receive(receivePacket); // wait to receive packet
+                        socket.receive(receivePacket);
 
-                            String file = new String(receivePacket.getData(),
-                                    0, receivePacket.getLength());
+                        String file = new String(receivePacket.getData(),
+                                0, receivePacket.getLength());
 
-                            files.add(file);
+                        files.add(file);
 
-                            // display information from received packet
-                            displayMessage("\nReceived file:" +
-                                    "\nTotal files stored: " + files.size() +
-                                    "\nFrom host: " + receivePacket.getAddress() +
-                                    "\nHost port: " + receivePacket.getPort() +
-                                    "\nLength: " + receivePacket.getLength() +
-                                    "\nContaining:\n\t" + file);
+                        displayMessage("\nReceived file:" +
+                                "\nTotal files stored: " + files.size() +
+                                "\nFrom host: " + receivePacket.getAddress() +
+                                "\nHost port: " + receivePacket.getPort() +
+                                "\nLength: " + receivePacket.getLength() +
+                                "\nContaining:\n\t" + file);
 
 
-                        }
-                        catch(IOException ioException)
-                        {
-                            displayMessage(ioException + "\n");
-                            ioException.printStackTrace();
-                        }
+                    }
+                    catch(IOException ioException)
+                    {
+                        displayMessage(ioException + "\n");
+                        ioException.printStackTrace();
                     }
                 }
-        );
+            }
+        };
+
+        ExecutorService es = Executors.newFixedThreadPool(1);
+        es.execute(task);
+        es.shutdown();
     }
 
 

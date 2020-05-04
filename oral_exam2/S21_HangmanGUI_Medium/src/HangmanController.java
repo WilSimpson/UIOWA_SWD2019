@@ -117,6 +117,12 @@ public class HangmanController
     private Label helpLabel;
 
     /**
+     * Label that will let the user know how many guesses remain
+     */
+    @FXML
+    private Label guessesRemainingLabel;
+
+    /**
      * All past incorrect guesses
      */
     @FXML
@@ -179,6 +185,10 @@ public class HangmanController
             hangmanShapes[i].setVisible(false);
         }
 
+        guessesRemainingLabel.setText(String.format("Guesses Remaining: %d/%d",
+                hangmanShapes.length,
+                hangmanShapes.length));
+
         failedGuessesTextfield.setText("");
         helpLabel.setText("Enter your guess!");
         randomlyChooseWord();
@@ -195,7 +205,7 @@ public class HangmanController
     @FXML
     public void onConfirmClicked(ActionEvent event)
     {
-        String guess = guessTextField.getText();
+        String guess = guessTextField.getText().toUpperCase();
         if(isHangmanDead())
         {
             helpLabel.setText("GAME OVER! To start a new game go to File -> New Game");
@@ -216,12 +226,16 @@ public class HangmanController
                 {
                     if(word.charAt(i) == guess.charAt(0))
                     {
-                        if(showChar[i] == true)
+                        if(showChar[i])
                         {
                             helpLabel.setText("OOPS! You've already made that guess!");
+                            guessTextField.clear();
                             return;
                         }
-                        showChar[i] = true;
+                        else
+                        {
+                            showChar[i] = true;
+                        }
                     }
                 }
 
@@ -262,6 +276,10 @@ public class HangmanController
                 {
                     failedGuessesTextfield.appendText(" "+guess);
                 }
+
+                guessesRemainingLabel.setText(String.format("Guesses Remaining: %d/%d",
+                        hangmanShapes.length-hangmanIndex,
+                        hangmanShapes.length));
             }
         }
 
@@ -276,7 +294,7 @@ public class HangmanController
         Random random = new Random();
         int randomIndex = random.nextInt(POSSIBLE_WORDS.length);
         System.out.println(randomIndex);
-        word = POSSIBLE_WORDS[randomIndex];
+        word = POSSIBLE_WORDS[randomIndex].toUpperCase();
         showChar = new boolean[word.length()];
     }
 

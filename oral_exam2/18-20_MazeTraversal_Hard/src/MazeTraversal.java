@@ -38,7 +38,7 @@ public class MazeTraversal
         char mazePath = '.';
         char movedChar = 'x';
         char deadEndChar = '0';
-        long sleepTime = 000l;
+        long sleepTime = 1000l;
 
         MazeSolver mazeSolver = new MazeSolver(mazeWall, mazePath, movedChar, deadEndChar, startRow, startCol, sleepTime);
         boolean solved = mazeSolver.mazeTraversal(maze, startRow, startCol);

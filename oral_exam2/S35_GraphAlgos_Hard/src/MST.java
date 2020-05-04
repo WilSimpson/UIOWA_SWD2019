@@ -35,11 +35,6 @@ public class MST<T>
         // to a vertex inside the minimum spanning tree
         PriorityQueue<Vertex<T>> pq = new PriorityQueue<>(Comparator.comparingInt(vertexWeight::get));
 
-        for(Vertex<T> v : graph.getVerts())
-        {
-            vertexWeight.put(v, -1);
-        }
-
         //Start with a random point on the graph
         pq.add(graph.getVerts().get(0));
 
@@ -57,9 +52,9 @@ public class MST<T>
                     {
                         //Checks if the current edge is the lightest
                         int newWeight = graph.getWeight(v1, v2);
-                        int oldWeight = vertexWeight.get(v2);
-                        if(newWeight < oldWeight
-                                || oldWeight == -1)
+                        Integer oldWeight = vertexWeight.get(v2);
+                        if(oldWeight == null ||
+                                newWeight < oldWeight)
                         {
                             vertexWeight.put(v2, newWeight);
                             mst.put(v2, new WeightedEdge<>(v1, v2, false, newWeight));
