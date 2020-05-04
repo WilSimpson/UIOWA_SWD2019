@@ -63,48 +63,36 @@ public class Server extends JFrame
      */
     public void waitForPackets()
     {
-        // updates displayArea
-        Task<Boolean> task = new Task<Boolean>()
+        while(true)
         {
-            @Override
-            protected Boolean call()
+            try
             {
-                while(true)
-                {
-                    try
-                    {
-                        byte[] data = new byte[10000];
-                        DatagramPacket receivePacket =
-                                new DatagramPacket(data, data.length);
+                byte[] data = new byte[10000];
+                DatagramPacket receivePacket =
+                        new DatagramPacket(data, data.length);
 
-                        socket.receive(receivePacket);
+                socket.receive(receivePacket);
 
-                        String file = new String(receivePacket.getData(),
-                                0, receivePacket.getLength());
+                String file = new String(receivePacket.getData(),
+                        0, receivePacket.getLength());
 
-                        files.add(file);
+                files.add(file);
 
-                        displayMessage("\nReceived file:" +
-                                "\nTotal files stored: " + files.size() +
-                                "\nFrom host: " + receivePacket.getAddress() +
-                                "\nHost port: " + receivePacket.getPort() +
-                                "\nLength: " + receivePacket.getLength() +
-                                "\nContaining:\n\t" + file);
+                displayMessage("\nReceived file:" +
+                        "\nTotal files stored: " + files.size() +
+                        "\nFrom host: " + receivePacket.getAddress() +
+                        "\nHost port: " + receivePacket.getPort() +
+                        "\nLength: " + receivePacket.getLength() +
+                        "\nContaining:\n\t" + file);
 
 
-                    }
-                    catch(IOException ioException)
-                    {
-                        displayMessage(ioException + "\n");
-                        ioException.printStackTrace();
-                    }
-                }
             }
-        };
-
-        ExecutorService es = Executors.newFixedThreadPool(1);
-        es.execute(task);
-        es.shutdown();
+            catch(IOException ioException)
+            {
+                displayMessage(ioException + "\n");
+                ioException.printStackTrace();
+            }
+        }
     }
 
 
